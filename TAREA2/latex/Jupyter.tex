@@ -1,0 +1,1500 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Tarea2}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+%    \maketitle
+    
+    
+
+    
+    \hypertarget{ejercicio-1-experimento-con-luz}{%
+\section*{Ejercicio 1: Experimento con
+Luz}\label{ejercicio-1-experimento-con-luz}}
+
+\hypertarget{descripciuxf3n-del-experimento-y-notaciuxf3n}{%
+\subsection*{Descripción del Experimento y
+Notación}\label{descripciuxf3n-del-experimento-y-notaciuxf3n}}
+
+Se mide la intensidad de la luz \(I_d\) al inicio de la capa de
+profundidad \(d\) de cierta agua. La longitud de cada capa es la misma.
+La distancia del inicio de la capa \(d\) a la superficie, es \(d\) veces
+la longitud de las capas. Y como es usual \(\Delta I_d := I_{d+1}-I_d\);
+y \(\hat I_d\) representa una aproximación a \(I_d\).
+
+Los resultados del experimento para esta agua son los siguientes.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib} \PY{k}{as} \PY{n+nn}{mpl}
+\PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{figure.figsize}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{]}
+\PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{14}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{n}{pd}\PY{o}{.}\PY{n}{set\PYZus{}option}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{display.precision}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{pd}\PY{o}{.}\PY{n}{set\PYZus{}option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{display.latex.repr}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{k+kc}{False}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{}datos = pd.read\PYZus{}clipboard(header=[0])}
+\PY{n}{agua1} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}d\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{:} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{:} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{:} \PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{:} \PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{:} \PY{l+m+mi}{8}\PY{p}{\PYZcb{}}\PY{p}{,}
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}I\PYZus{}d\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+m+mf}{0.842}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+m+mf}{0.639}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:} \PY{l+m+mf}{0.459}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:} \PY{l+m+mf}{0.348}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{:} \PY{l+m+mf}{0.263}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{:} \PY{l+m+mf}{0.202}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{:} \PY{l+m+mf}{0.154}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{:} \PY{l+m+mf}{0.114}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{:} \PY{l+m+mf}{0.085}\PY{p}{\PYZcb{}}\PY{p}{,}
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Delta I\PYZus{}d\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.203}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.18}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.111}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.085}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.061}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.048}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.04}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.029}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{:} \PY{k+kc}{None}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}
+\PY{n}{datos} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{agua1}\PY{p}{)}
+
+\PY{n}{display}\PY{p}{(}\PY{n}{datos}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{g}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{display}\PY{p}{(}\PY{n}{datos}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Delta I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}  \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{g}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{}print(datos.to\PYZus{}latex(index=False, escape=False))}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:xlabel='\$d\$'>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:xlabel='\$I\_d\$'>
+    \end{Verbatim}
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_1_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_1_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tabular}{rrr}
+\toprule
+ $d$ &  $I_d$ &  $\Delta I_d$ \\
+\midrule
+   0 &  0.842 &        -0.203 \\
+   1 &  0.639 &        -0.180 \\
+   2 &  0.459 &        -0.111 \\
+   3 &  0.348 &        -0.085 \\
+   4 &  0.263 &        -0.061 \\
+   5 &  0.202 &        -0.048 \\
+   6 &  0.154 &        -0.040 \\
+   7 &  0.114 &        -0.029 \\
+   8 &  0.085 &           NaN \\
+\bottomrule
+\end{tabular}
+
+    \hypertarget{ecuaciuxf3n-dinuxe1mica-y-soluciuxf3n}{%
+\subsection*{Ecuación Dinámica y
+Solución}\label{ecuaciuxf3n-dinuxe1mica-y-soluciuxf3n}}
+
+La segunda gráfica de diferencias contra intensidades sugiere un modelo
+lineal. Debe de considerarse con cuidado cuál es la ecuación dinámica de
+estos datos pues los datos del eje \(I_d\) han sido re-ordenados. (El
+punto con \(d=0\) en realidad será aquel con mayor \(I_d\), pues se
+observa de los datos que la intensidad disminuye conforme la capa \(d\)
+es más profunda.)
+
+La hipótesis a usar para este modelo es que una fracción
+\(f:1\geq f \geq 0\) de la intensidad de luz se pierde al pasar a la
+siguiente capa. De manera que la diferencia de intensidad de la luz de
+una capa a la siguiente está dada por la ecuación dinámica
+
+\[\Delta \hat I_d = -f I_d,\] que tiene solución
+
+\[\hat I_d = (1-f)^{d}I_0,\]
+
+donde \(d\) está extendido del número de capas en enteros no negativos a
+cualquier valor no negativo. Se interpretan los valores no enteros de
+\(d\) como la distancia a la superficie en múltiplos del grosor de las
+capas.
+
+    \hypertarget{ajuste-lineal}{%
+\subsection*{Ajuste lineal}\label{ajuste-lineal}}
+
+Se usa una librería de ajuste polinomial y se usa el coeficiente de
+\(x\) del resultado para grado 1 como pendiente para modelar la
+diferencia de intensidad respecto de la intensidad.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{numpy} \PY{k+kn}{import} \PY{n}{polyfit} \PY{k}{as} \PY{n}{pf}
+\PY{p}{(}\PY{n}{m}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{pf}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{datos}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{datos}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{deg}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\PY{p}{(}\PY{n}{m}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{c+c1}{\PYZsh{} m es \PYZhy{}f}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(-0.2545728251931048, 0.0015080631135462607)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Como hemos dicho al inicio de esta sección en realidad los puntos
+\((I_d, \Delta I_d)\) cerca de intensidad 0 son datos de las capas más
+profundas. Si \(I_d\) llegase a \(0\) en algún \(d\), las siguientes
+\(I_{d+k}\) no deberían de poder disminuir a valores negativos. Por lo
+que el valor de \(\Delta I_d\) cuando \(I_d=0\) debe de ser \(0\), e
+ignoramos que la regresión lineal nos de una intersección distinta de
+\((0,0)\).
+
+Tomamos entonces \(f=0.2546\), y añadimos las aproximaciones a la tabla
+de ``pandas''.
+
+    \hypertarget{comparaciuxf3n-de-soluciuxf3n-con-datos-observados}{%
+\subsection*{Comparación de Solución con Datos
+Observados}\label{comparaciuxf3n-de-soluciuxf3n-con-datos-observados}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ajuste\PYZus{}lineal} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{m}\PY{o}{*}\PY{n}{x}
+\PY{n}{solucion} \PY{o}{=} \PY{k}{lambda} \PY{n}{d}\PY{p}{:} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+}\PY{n}{m}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{d} \PY{o}{*} \PY{n}{datos}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{datos}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{datos}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{applymap}\PY{p}{(}\PY{n}{solucion}\PY{p}{)}
+\PY{n}{datos}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Delta }\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{datos}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{applymap}\PY{p}{(}\PY{n}{ajuste\PYZus{}lineal}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}print(datos.to\PYZus{}latex(index=False, escape=False))}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{rrrrr}
+\toprule
+ $d$ &  $I_d$ &  $\Delta I_d$ &  $\hat I_d$ &  $\Delta \hat I_d$ \\
+\midrule
+   0 &  0.842 &        -0.203 &       0.842 &             -0.214 \\
+   1 &  0.639 &        -0.180 &       0.628 &             -0.163 \\
+   2 &  0.459 &        -0.111 &       0.468 &             -0.117 \\
+   3 &  0.348 &        -0.085 &       0.349 &             -0.089 \\
+   4 &  0.263 &        -0.061 &       0.260 &             -0.067 \\
+   5 &  0.202 &        -0.048 &       0.194 &             -0.051 \\
+   6 &  0.154 &        -0.040 &       0.144 &             -0.039 \\
+   7 &  0.114 &        -0.029 &       0.108 &             -0.029 \\
+   8 &  0.085 &           NaN &       0.080 &             -0.022 \\
+\bottomrule
+\end{tabular}
+
+    Se mantiene el color verde para los datos originales, y se usa azúl para
+la solución del sistema dinámico que aproxima los datos.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display}\PY{p}{(}\PY{n}{datos}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Delta I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Delta }\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}  \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{g}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{b}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+       \PY{n}{title}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Comparación de Diferencias respecto Intensidad en Datos y en la Solución}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{display}\PY{p}{(}\PY{n}{datos}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{y}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat I\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}  \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{g}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{b}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+       \PY{n}{title}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Comparación de Datos y la Solución}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:title=\{'center':'Comparación de Diferencias respecto Intensidad en Datos y en la Solución'\}, xlabel='\$I\_d\$'>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:title=\{'center':'Comparación de Datos y la Solución'\}>
+    \end{Verbatim}
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Podemos observar que nuestra aproximación está un poco por debajo de los
+datos en los últimos puntos, pero en algunos otros por encima con un
+pequeño margen.
+
+    \hypertarget{comparaciuxf3n-del-agua-anterior-con-el-agua-vista-en-clase}{%
+\subsection*{Comparación del Agua anterior con el Agua vista en
+Clase}\label{comparaciuxf3n-del-agua-anterior-con-el-agua-vista-en-clase}}
+
+    Llamemosle ``Agua \#1'' al agua a la que le corresponden los datos
+anteriores de este ejercicio y ``Agua \#2'' al agua con los datos vistos
+en clase. Para el Agua \#2 los datos del experimento nombraremos las
+intensidades en el grosor \(d\) por \(I_d\). Donde las capas \(d\) son
+del mismo grosor que en el Agua \#1 pero la opacidad podría ser
+distinta.
+
+    Para determinar que una es más opaca que la otra no es suficiente ver
+los cambios en las capas correspondientes, pues el cambio es
+proporcional a la intensidad al inicio de la capa y estas son distintas.
+Pero con la solución del sistema dinámico para el agua \#1 podemos
+comparar sustituyendo el valor inicial \(I'_0\) por \(I_0\) en
+
+\[\hat I_d = (1-f)^{d}I_0.\]
+
+Pues esto aproximaría cuanto sería la intensidad en el agua \#1 si se
+empezara con la misma intensidad de luz en la superficie que en el agua
+\#2. Nombremos \(\hat I'_d\) a tales aproximaciones; la intensidad de la
+luz en la capa \(d\) en el agua \#1 si la intensidad de luz inicial
+fuera la misma que en el agua \#2.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{agua2} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}d\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{:} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{:} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{:} \PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{:} \PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{:} \PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{:} \PY{l+m+mi}{9}\PY{p}{\PYZcb{}}\PY{p}{,}
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}I}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{\PYZus{}d\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+m+mf}{0.4}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+m+mf}{0.33}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:} \PY{l+m+mf}{0.27}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:} \PY{l+m+mf}{0.216}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{:} \PY{l+m+mf}{0.17}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{:} \PY{l+m+mf}{0.14}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{:} \PY{l+m+mf}{0.124}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{:} \PY{l+m+mf}{0.098}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{:} \PY{l+m+mf}{0.082}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{:} \PY{l+m+mf}{0.065}\PY{p}{\PYZcb{}}\PY{p}{,}
+         \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Delta I}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{\PYZus{}d\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.07}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.06}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.054}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.046}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.016}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.026}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.016}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.017}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{:} \PY{k+kc}{None}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}
+\PY{n}{datos2} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{agua2}\PY{p}{)}
+\PY{n}{datos2} \PY{o}{=} \PY{n}{datos}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{datos2}\PY{p}{,} \PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{outer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{datos2}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{hat I}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{\PYZus{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{datos2}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{applymap}\PY{p}{(}\PY{k}{lambda} \PY{n}{d}\PY{p}{:} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+}\PY{n}{m}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{d}\PY{o}{*}\PY{n}{datos2}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}print(datos2.iloc[:,[5,7]].to\PYZus{}latex(index=False, escape=False)) }
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{rr}
+\toprule
+ $I'_d$ &  $\hat I'_d$ \\
+\midrule
+  0.400 &        0.400 \\
+  0.330 &        0.298 \\
+  0.270 &        0.222 \\
+  0.216 &        0.166 \\
+  0.170 &        0.124 \\
+  0.140 &        0.092 \\
+  0.124 &        0.069 \\
+  0.098 &        0.051 \\
+  0.082 &        0.038 \\
+  0.065 &        0.028 \\
+\bottomrule
+\end{tabular}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{datos2}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}d\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}I}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{\PYZus{}d\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{hat I}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{\PYZus{}d\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{g}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{b}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:xlabel='\$d\$'>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_18_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Como la estimación es mucho menor usando la fracción del agua \#1 para
+estimar la del agua \#2; quiere decir que la fracción de intensidad de
+luz que pierde el agua \#1 es mayor que la que pierde el agua \#2. Es
+decir, el agua \#1 (de esta tarea) es menos clara que la del agua \#2
+(que vimos en clase).
+
+    \hypertarget{ejercicio-2-tiempos-de-duplicado-y-reducciuxf3n-a-la-mitad}{%
+\section*{Ejercicio 2: Tiempos de Duplicado y Reducción a la
+Mitad}\label{ejercicio-2-tiempos-de-duplicado-y-reducciuxf3n-a-la-mitad}}
+
+Sea \(y(t)=A\cdot B^{kt}\) para \(A,B,k >0\). El tiempo \(t_r\) (si
+existe) con \(r> 0\) para que \(y\) alcance \(r\) veces su valor
+partiendo del tiempo \(t_0\) inicial está dado por la ecuación
+
+\[A\cdot B^{k(t_r+t_0)} = rA\cdot B^{k t_0},\] \[ B^{k t_r} = r.\]
+
+Por lo que es independiente del valor de \(A\). Si \(\log\) es el
+logaritmo natural
+
+\[ B^{k t_r} = \exp(k t_r\log B) =r,\]
+
+entonces si \(r > 0\)
+
+\[k t_r \log B = \log r,\] \[t_r = \frac{\log r}{k \log B}.\]
+
+Entonces
+\[t_{1/r} = \frac{\log 1/r}{k \log B} = \frac{\log 1-\log r}{k \log B} = -\frac{\log r}{k \log B},\]
+\[t_{1/r} = t_{r}.\]
+
+Un \(t_r\) negativo interpretado como tiempo es que hace \(|t_r|\) de
+\(t_0\) se alcanzó \(r\) veces \(y(t_0)\).
+
+En particular cuando \(B>1\) y \(r=2\) se tiene \(t_2\) el tiempo de
+duplicado. Cuando \(B<1\) y \(r=1/2\) se tiene el tiempo \(t_{1/2}\) de
+reducción a la mitad.
+
+    \hypertarget{a-y-100-cdot-0.8t}{%
+\subsection*{\texorpdfstring{a)
+\(y = 100 \cdot 0.8^t\)}{a) y = 100 \textbackslash cdot 0.8\^{}t}}\label{a-y-100-cdot-0.8t}}
+
+Como \(0.8<1\) solo hay tiempo de reducción a la mitad:
+\[t_{1/2} = -\frac{\log 2}{\log 0.8}.\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{math} \PY{k+kn}{import} \PY{n}{log}\PY{p}{,}\PY{n}{exp}
+\PY{o}{\PYZhy{}}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{n}{log}\PY{p}{(}\PY{l+m+mf}{0.8}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+3.1062837195053903
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{b-y4cdot-53t}{%
+\subsection*{\texorpdfstring{b)
+\(y=4\cdot 5^{3t}\)}{b) y=4\textbackslash cdot 5\^{}\{3t\}}}\label{b-y4cdot-53t}}
+
+Tiempo de duplicado: \[t_2= \frac{\log 2}{3\log 5}.\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{3}\PY{o}{*}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+0.14355885269113103
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{c-y10cdot-0.82t}{%
+\subsection*{\texorpdfstring{c)
+\(y=10\cdot 0.8^{2t}\)}{c) y=10\textbackslash cdot 0.8\^{}\{2t\}}}\label{c-y10cdot-0.82t}}
+
+Tiempo de reducción a la mitad:
+\[t_{1/2} = -\frac{\log 2}{2 \log 0.8}.\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZhy{}}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{log}\PY{p}{(}\PY{l+m+mf}{0.8}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1.5531418597526951
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{d-y0.010.1-t}{%
+\subsection*{\texorpdfstring{d)
+\(y=0.01^{0.1 t}\)}{d) y=0.01\^{}\{0.1 t\}}}\label{d-y0.010.1-t}}
+
+Tiempo de reducción a la mitad: \[-\frac{\log 2}{0.1 \log 0.01}.\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZhy{}}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{o}{*}\PY{n}{log}\PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1.505149978319906
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ejercicio-3}{%
+\section*{Ejercicio 3}\label{ejercicio-3}}
+
+Dada una inversión inicial \(A_0\) con una tasa de interés compuesta
+\(r\), a los \(t\) años se tiene \[A_t = A_0 (1+r)^t.\] Las unidades
+representan dólares.
+
+\hypertarget{a-encontrar-a_10-si-a_01-r0.06.}{%
+\subsection*{\texorpdfstring{a) Encontrar \(A_{10}\) si \(A_0=1\),
+\(r=0.06\).}{a) Encontrar A\_\{10\} si A\_0=1, r=0.06.}}\label{a-encontrar-a_10-si-a_01-r0.06.}}
+
+\[A_{10} = 1\cdot (1+0.06)^{10} = 1.06^{10}.\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{l+m+mf}{1.06}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{10}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1.7908476965428546
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{b-para-que-valor-de-r-se-tendruxeda-a_82-si-a_01}{%
+\subsection*{\texorpdfstring{b) ¿Para que valor de \(r\) se tendría
+\(A_8=2\) si
+\(A_0=1\)?}{b) ¿Para que valor de r se tendría A\_8=2 si A\_0=1?}}\label{b-para-que-valor-de-r-se-tendruxeda-a_82-si-a_01}}
+
+Se busca \(r\) tal que \[2 = (1+r)^8,\] \[2^{1/8} = 1+r,\]
+\[r = 2^{1/8}-1.\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{8}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+0.09050773266525769
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{c-verificar-si-una-inversiuxf3n-se-duplica-a-una-tasa-de-interuxe9s-de-r-se-duplica-en-72r-auxf1os-para-r468912.}{%
+\subsection*{\texorpdfstring{c) Verificar si una inversión se duplica a
+una tasa de interés de \(R\%\) se duplica en \(72/R\) años; para
+\(R=4,6,8,9,12\).}{c) Verificar si una inversión se duplica a una tasa de interés de R\textbackslash\% se duplica en 72/R años; para R=4,6,8,9,12.}}\label{c-verificar-si-una-inversiuxf3n-se-duplica-a-una-tasa-de-interuxe9s-de-r-se-duplica-en-72r-auxf1os-para-r468912.}}
+
+    Sabemos que el tiempo que buscamos viene de la ecuación
+\(y=A\cdot B^kt\) como en el ejercicio 2; \(B=1+R/100\), \(k=1\) y la
+inversión inicial es \(A>0\). Y es
+\(t_2=\frac{\log 2}{\log B} = \frac{\log 2}{\log (1+R/100)}\) (sin
+depender de la inversión inicial mientras no sea 0).
+
+Así que verificamos comprobando contra el valor real.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{datos3c} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{R}\PY{p}{:} \PY{p}{(}\PY{n}{R}\PY{p}{,} \PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+}\PY{n}{R}\PY{o}{/}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{72}\PY{o}{/}\PY{n}{R}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{9}\PY{p}{,}\PY{l+m+mi}{12}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+             \PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}R\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}t\PYZus{}2\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}72/R\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}print(datos3c.to\PYZus{}latex(index=False, escape=False)) }
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{rrr}
+\toprule
+ $R$ &  $t_2$ &  $72/R$ \\
+\midrule
+   4 & 17.673 &    18.0 \\
+   6 & 11.896 &    12.0 \\
+   8 &  9.006 &     9.0 \\
+   9 &  8.043 &     8.0 \\
+  12 &  6.116 &     6.0 \\
+\bottomrule
+\end{tabular}
+
+    Se puede ver que la aproximación \(72/R\) es bastante cercana al tiempo
+de duplicado verdadero.
+
+    \hypertarget{ejercicio-4}{%
+\section*{Ejercicio 4}\label{ejercicio-4}}
+
+\hypertarget{a-una-cuxe9lula-de-la-bacteria-dicha-tiene-masa-2times-10-11-gramos.-si-en-un-cultivo-de-tal-bacteria-en-el-tiempo-0-hay-107-cuxe9lulas-cuuxe1l-es-la-masa-de-bacterias-en-el-cultivo-en-el-tiempo-0}{%
+\subsection*{\texorpdfstring{a) Una célula de la bacteria dicha tiene
+masa \(2\times 10^{-11}\) gramos. Si en un cultivo de tal bacteria en el
+tiempo \(0\) hay \(10^7\) células, ¿cuál es la masa de bacterias en el
+cultivo en el tiempo
+\(0\)?}{a) Una célula de la bacteria dicha tiene masa 2\textbackslash times 10\^{}\{-11\} gramos. Si en un cultivo de tal bacteria en el tiempo 0 hay 10\^{}7 células, ¿cuál es la masa de bacterias en el cultivo en el tiempo 0?}}\label{a-una-cuxe9lula-de-la-bacteria-dicha-tiene-masa-2times-10-11-gramos.-si-en-un-cultivo-de-tal-bacteria-en-el-tiempo-0-hay-107-cuxe9lulas-cuuxe1l-es-la-masa-de-bacterias-en-el-cultivo-en-el-tiempo-0}}
+
+    Como hay \(10^7\) células de masa \(2\times 10^{-11}\) gramos se tiene
+una masa de \(2\times 10^{7-11} = 2\times 10^{-4}\) gramos de bacterias
+en el cultivo.
+
+    \hypertarget{b-supongamos-que-para-esta-bacteria-el-tiempo-de-duplicaciuxf3n-es-de-30-minutos.-cuuxe1nto-tiempo-en-minutos-tomaruxeda-para-que-el-cultivo-del-inciso-a-llegue-a-una-masa-de-un-gramo}{%
+\subsection*{b) Supongamos que para esta bacteria el tiempo de
+duplicación es de 30 minutos. ¿Cuánto tiempo en minutos tomaría para que
+el cultivo del inciso a) llegue a una masa de un
+gramo?}\label{b-supongamos-que-para-esta-bacteria-el-tiempo-de-duplicaciuxf3n-es-de-30-minutos.-cuuxe1nto-tiempo-en-minutos-tomaruxeda-para-que-el-cultivo-del-inciso-a-llegue-a-una-masa-de-un-gramo}}
+
+    Sea \(t\) el tiempo en intervalos de 30 minutos, es decir \(t\) denota
+el tiempo \(t\times 30\) minutos. Sea \(M_t\) la masa en el tiempo \(t\)
+en gramos. Tenemos que \[M_{t+1} = 2 M_t,\] y para esta ecuación
+dinámica conocemos que la solución es \[M_t = 2^t M_0.\]
+
+    Recordemos que \(M_0=2\times10^{−4}\). Para que \(M_t\) sea \(1\) gramo,
+\[1 = 2^t M_0,\] \[t = -\frac{\log M_0}{\log 2}.\] O \(t\times 30\)
+minutos.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{30}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+368.6313713864835
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Es decir tomaría \(368\) minutos y poco más de medio minuto para llegar
+a un gramo.
+
+    \hypertarget{c}{%
+\subsection*{c)}\label{c}}
+
+\hypertarget{cuuxe1ntos-minutos-para-que-llegue-m_t-a-ser-6times-1027-la-masa-en-gramos-de-la-tierra-cuuxe1ntas-horas}{%
+\subsubsection*{\texorpdfstring{¿Cuántos minutos para que llegue \(M_t\)
+a ser \(6\times 10^{27}\) (la masa en gramos de la Tierra)? ¿Cuántas
+horas?}{¿Cuántos minutos para que llegue M\_t a ser 6\textbackslash times 10\^{}\{27\} (la masa en gramos de la Tierra)? ¿Cuántas horas?}}\label{cuuxe1ntos-minutos-para-que-llegue-m_t-a-ser-6times-1027-la-masa-en-gramos-de-la-tierra-cuuxe1ntas-horas}}
+
+\(t\) debe ser tal que \[6\times 10^{27} = 2^t M_0,\]
+\[t = \frac{\log(6\times 10^{27})-\log M_0}{\log 2}.\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{t} \PY{o}{=} \PY{p}{(}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{6}\PY{o}{*}\PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{27}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{En minutos: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{t}\PY{o}{*}\PY{l+m+mi}{30}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{En horas: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{t}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+En minutos:  3136.942003266882
+En horas:  52.2823667211147
+    \end{Verbatim}
+
+    \hypertarget{por-quuxe9-no-estuxe1mos-preocupados-por-esto-en-el-laboratorio-por-quuxe9-no-ha-sucedido-esto-ya-en-la-naturaleza}{%
+\subsubsection*{¿Por qué no estámos preocupados por esto en el
+laboratorio? ¿Por qué no ha sucedido esto ya en la
+naturaleza?}\label{por-quuxe9-no-estuxe1mos-preocupados-por-esto-en-el-laboratorio-por-quuxe9-no-ha-sucedido-esto-ya-en-la-naturaleza}}
+
+El modelo dónde las diferencias de densidad relativas a la propia
+densidad de la población bacteriana crece linealmente, tiene como
+supuesto que las condiciones son similares en todo el intervalo de
+tiempo. Una de las condiciones es que la densidad este debajo de cierto
+nivel para que el metabolismo máximo de las bacterias consuma una
+cantidad de nutrimentos menor o igual a la que hay en su entorno; por lo
+tanto se estarían dividiendo a velocidad constante.
+
+No en todas partes del laboratorio habría suficientes nutrimentos para
+las bacterias ni mucho menos en toda la superficie de la tierra (que
+además es solo una fracción de la masa total de la Tierra). Además el
+modelo no toma en cuenta depredadores o meramente amenazas que corten
+sus nutrimentos o directamente las maten.
+
+\hypertarget{explique-por-quuxe9-no-es-una-buena-idea-extrapolar-los-resultados-mucho-muxe1s-alluxe1-del-punto-final-de-la-recolecciuxf3n-de-datos.}{%
+\subsubsection*{Explique por qué no es una buena idea extrapolar los
+resultados mucho más allá del punto final de la recolección de
+datos.}\label{explique-por-quuxe9-no-es-una-buena-idea-extrapolar-los-resultados-mucho-muxe1s-alluxe1-del-punto-final-de-la-recolecciuxf3n-de-datos.}}
+
+Porque es desconocido que si hubieramos seguido recolectando datos las
+condiciones iban a ser las mismas. Y la variación pudo haber sido mayor,
+descartando que un solo ajuste lineal pueda aproximar bien todos los
+datos de muestras más grandes.
+
+Pero incluso en el mejor de los casos: Cuando hay un modelo lineal que
+mejor aproxima una parte del fenómeno; del cuál se puede obtener un
+modelo para el fenómeno que nos interesa (Como obtener una solución del
+sistema dinámico en un modelo de crecimiento.) El error de medición es
+prácticamente inevitable. Si está dado tal error de medición por la
+misma variable aleatoria para cada medición, un mejor modelo surge de
+una muestra más grande en relación con el teorema del límite central.
+
+Si pensamos en estos modelos lineales como rectas, sabemos que la
+distancia de rectas no paralelas incrementa conforme se aleja de la
+intersección de estas. Al aplicar regresión lineal y obtener un vector
+\(x_0\) y una transformación lineal \(T\) se tiene una aproximación
+\(Tx+x_0\) que minimiza la distancia a la muestra. Pero conforme crece
+la norma de \(x\) nos alejamos de \(x_0\) que es un punto que está cerca
+de la muestra, es decir nos alejamos de la intersección con el mejor
+modelo y crecería el error. (Resultado de Espacios Vectoriales Normados
+de Dimensión Finita.)
+
+    \hypertarget{ejercicio-5-modelo-para-el-crecimiento-del-moho}{%
+\section*{Ejercicio 5: Modelo para el Crecimiento del
+Moho}\label{ejercicio-5-modelo-para-el-crecimiento-del-moho}}
+
+El aumento en el área de la colonia de moho durante cualquier intervalo
+de tiempo es proporcional a la longitud de la circunferencia de la
+colonia en el punto medio del intervalo de tiempo.
+
+\hypertarget{a-explique-la-derivaciuxf3n-de-la-ecuaciuxf3n-dinuxe1mica}{%
+\subsection*{a) Explique la derivación de la ecuación
+dinámica}\label{a-explique-la-derivaciuxf3n-de-la-ecuaciuxf3n-dinuxe1mica}}
+
+\[A_{t+1}-A_{t-1} = k C_t.\]
+
+    Se habla del aumento en el área de la colonia de moho durante cualquier
+intervalo de tiempo, entonces tomamos el intervalo \([t-1,t+1]\), el
+punto medio de este intervalo es \(t\). El aumento en este intervalo es
+\(A_{t+1}-A_{t-1}\) y se dice proporcional a \(C_t\) en el modelo, la
+longitud de circunferencia de la colonia en el punto medio \(t\) del
+intervalo. Digamos que es proporcional con constante \(k\) y tenemos
+\[A_{t+1}-A_{t-1} = k C_t.\]
+
+    Si se sustituye \(C_t\) por \(2\sqrt{\pi}\sqrt{A_t}\), y
+\(K=2\sqrt{\pi}\) se tiene \[A_{t+1}-A_{t-1} = K\sqrt{A_t}.\]
+
+\hypertarget{b-probar-que-a_t-frack216-t2-es-soluciuxf3n-en-la-uxfaltima-ecuaciuxf3n.}{%
+\subsection*{\texorpdfstring{b) Probar que \[A_t = \frac{K^2}{16} t^2\]
+es solución en la última
+ecuación.}{b) Probar que A\_t = \textbackslash frac\{K\^{}2\}\{16\} t\^{}2 es solución en la última ecuación.}}\label{b-probar-que-a_t-frack216-t2-es-soluciuxf3n-en-la-uxfaltima-ecuaciuxf3n.}}
+
+    Es solución si al sustituir lo anterior en la ecuación, la ecuación es
+verdadera.
+\[A_{t+1} = \frac{K^2}{16} (t+1)^2 = \frac{K^2}{16} (t^2+2t+1),\]
+\[A_{t-1} = \frac{K^2}{16} (t-1)^2 = \frac{K^2}{16} (t^2-2t+1).\]
+Entonces restando estas cantidades se tiene
+\[A_{t+1}-A_{t-1} = \frac{K^2}{16} 4t = \frac{K^2}{4} t.\] En
+sustituyendo \(A_t = \frac{K^2}{16} t^2\) en \(K\sqrt{A_t}\) se tiene
+\[K\sqrt{A_t} = K\left(\frac{K}{4} t\right) = \frac{K^2}{4} t.\] Con lo
+que se prueba que \(A_t = \frac{K^2}{16} t^2\) es solución de
+\[A_{t+1}-A_{t-1} = K\sqrt{A_t}.\]
+
+    \hypertarget{c-graficar-y-encontrar-una-soluciuxf3n-que-modele-los-datos}{%
+\subsection*{c) Graficar y encontrar una solución que modele los
+datos}\label{c-graficar-y-encontrar-una-soluciuxf3n-que-modele-los-datos}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}Datos5c = pd.read\PYZus{}clipboard(header=[0])}
+\PY{c+c1}{\PYZsh{}print(Datos5c.to\PYZus{}dict())}
+\PY{n}{Datos5c} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}
+    \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}t\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{:} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{:} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{:} \PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{:} \PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{:} \PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{:} \PY{l+m+mi}{9}\PY{p}{\PYZcb{}}\PY{p}{,}
+     \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}A\PYZus{}t\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:} \PY{l+m+mi}{24}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:} \PY{l+m+mi}{46}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{:} \PY{l+m+mi}{84}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{:} \PY{l+m+mi}{126}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{:} \PY{l+m+mi}{176}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{:} \PY{l+m+mi}{248}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{:} \PY{l+m+mi}{326}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{:} \PY{l+m+mi}{420}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{math} \PY{k+kn}{import} \PY{n}{sqrt}
+\PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}A\PYZus{}t\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{sqrt}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{diferencia\PYZus{}A}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{columna}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{t} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k}{return} \PY{k+kc}{None}
+    \PY{k}{if} \PY{n}{t} \PY{o}{==} \PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Datos5c}\PY{o}{.}\PY{n}{index}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{k+kc}{None}
+    \PY{k}{return} \PY{n}{Datos5c}\PY{p}{[}\PY{n}{columna}\PY{p}{]}\PY{p}{[}\PY{n}{t}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{t}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+    
+\PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{diferencia\PYZus{}A}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n+nb}{list}\PY{p}{(}\PY{n}{Datos5c}\PY{o}{.}\PY{n}{index}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}Datos5c[\PYZsq{}\PYZdl{}A\PYZus{}\PYZob{}t+1\PYZcb{}\PYZhy{}A\PYZus{}\PYZob{}t\PYZhy{}1\PYZcb{}\PYZdl{}\PYZsq{}]}
+\PY{n}{Datos5c}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}A\PYZus{}t\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}print(Datos5c[[\PYZdq{}\PYZdl{}\PYZbs{}sqrt\PYZob{}A\PYZus{}t\PYZcb{}\PYZdl{}\PYZdq{},\PYZdq{}\PYZdl{}A\PYZus{}\PYZob{}t+1\PYZcb{}\PYZhy{}A\PYZus{}\PYZob{}t\PYZhy{}1\PYZcb{}\PYZdl{}\PYZdq{}]].to\PYZus{}latex(index=False, escape=False))}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:xlabel='\$\textbackslash{}\textbackslash{}sqrt\{A\_t\}\$'>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_54_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tabular}{rr}
+\toprule
+ $\sqrt{A_t}$ &  $A_{t+1}-A_{t-1}$ \\
+\midrule
+        2.000 &                NaN \\
+        2.828 &               20.0 \\
+        4.899 &               38.0 \\
+        6.782 &               60.0 \\
+        9.165 &               80.0 \\
+       11.225 &               92.0 \\
+       13.266 &              122.0 \\
+       15.748 &              150.0 \\
+       18.055 &              172.0 \\
+       20.494 &                NaN \\
+\bottomrule
+\end{tabular}
+
+    Para encontrar \(K\) simplemente se toma la media del conjunto
+\(\left\{\frac{A_{t+1}-A_{t-1}}{\sqrt{A_t}}:t=1,2,\ldots,8\right\}\).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{numpy} \PY{k+kn}{import} \PY{n}{median}\PY{p}{,}\PY{n}{mean}
+\PY{n}{K} \PY{o}{=} \PY{n}{median}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{:} \PY{n}{y}\PY{o}{/}\PY{n}{x}\PY{p}{,}
+           \PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}A\PYZus{}t\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{p}{)}\PY{p}{)}
+\PY{n}{K}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+8.787616489366762
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{56}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}K}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}A\PYZus{}t\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}A\PYZus{}t\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{K}\PY{o}{*}\PY{n}{x}\PY{p}{)}
+\PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{frac}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{K\PYZca{}2\PYZcb{}}\PY{l+s+si}{\PYZob{}16\PYZcb{}}\PY{l+s+s2}{t\PYZca{}2\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{p}{(}\PY{n}{K}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{16}\PY{o}{*}\PY{n}{t}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{Datos5c}
+\PY{n}{display}\PY{p}{(}\PY{n}{Datos5c}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}A\PYZus{}t\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                     \PY{n}{y}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}K}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}A\PYZus{}t\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{b}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{display}\PY{p}{(}\PY{n}{Datos5c}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                     \PY{n}{y}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{frac}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{K\PYZca{}2\PYZcb{}}\PY{l+s+si}{\PYZob{}16\PYZcb{}}\PY{l+s+s2}{t\PYZca{}2\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{b}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}print(Datos5c[[\PYZdq{}\PYZdl{}t\PYZdl{}\PYZdq{}, \PYZdq{}\PYZdl{}A\PYZus{}t\PYZdl{}\PYZdq{}, \PYZdq{}\PYZdl{}\PYZbs{}\PYZbs{}frac\PYZob{}K\PYZca{}2\PYZcb{}\PYZob{}16\PYZcb{}t\PYZca{}2\PYZdl{}\PYZdq{}]].to\PYZus{}latex(index=False, escape=False))}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:xlabel='\$\textbackslash{}\textbackslash{}sqrt\{A\_t\}\$'>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:xlabel='\$t\$'>
+    \end{Verbatim}
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tabular}{rrr}
+\toprule
+ $t$ &  $A_t$ &  $\frac{K^2}{16}t^2$ \\
+\midrule
+   0 &      4 &                0.000 \\
+   1 &      8 &                4.826 \\
+   2 &     24 &               19.306 \\
+   3 &     46 &               43.437 \\
+   4 &     84 &               77.222 \\
+   5 &    126 &              120.660 \\
+   6 &    176 &              173.750 \\
+   7 &    248 &              236.493 \\
+   8 &    326 &              308.889 \\
+   9 &    420 &              390.937 \\
+\bottomrule
+\end{tabular}
+
+    En rojo los valores observados, y en azul la solución del modelo
+propuesto. Se puede ver que meramente tomar \(\frac{K^2}{16}t^2\) como
+solución subestima todos los datos del experimento. Esto es de
+esperarse: La ecuación de diferencias se resuelve tomando \(K\) como la
+media que mencionamos antes, quiere decir que no se estima ni se
+subestima tanto en cuánto el aumento. Pero la solución empieza en \(0\)
+mientras que sabemos que el primer dato es con un valor de \(4\) por lo
+que casi todos los datos se subestiman por \(4\) al haber tomado una
+tasa de cambio media.
+
+Si a la solución anterior le añadimos \(4\) y le llamamos \(\hat A_t\),
+se mejora la cercanía a los datos incluso en las diferencias relativas.
+Para esta solución usamos verde en la gráfica.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{frac}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{K\PYZca{}2\PYZcb{}}\PY{l+s+si}{\PYZob{}16\PYZcb{}}\PY{l+s+s2}{t\PYZca{}2+4\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{frac}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{K\PYZca{}2\PYZcb{}}\PY{l+s+si}{\PYZob{}16\PYZcb{}}\PY{l+s+s2}{t\PYZca{}2\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{+}\PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{Datos5c}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}
+    \PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{diferencia\PYZus{}A}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{frac}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{K\PYZca{}2\PYZcb{}}\PY{l+s+si}{\PYZob{}16\PYZcb{}}\PY{l+s+s2}{t\PYZca{}2+4\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,}
+    \PY{n+nb}{list}\PY{p}{(}\PY{n}{Datos5c}\PY{o}{.}\PY{n}{index}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{display}\PY{p}{(}\PY{n}{Datos5c}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}A\PYZus{}t\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                     \PY{n}{y}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{g}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{display}\PY{p}{(}\PY{n}{Datos5c}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                     \PY{n}{y}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{frac}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{K\PYZca{}2\PYZcb{}}\PY{l+s+si}{\PYZob{}16\PYZcb{}}\PY{l+s+s2}{t\PYZca{}2+4\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{o}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{g}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{k}{if} \PY{k+kc}{False}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{Datos5c}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{frac}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{K\PYZca{}2\PYZcb{}}\PY{l+s+si}{\PYZob{}16\PYZcb{}}\PY{l+s+s2}{t\PYZca{}2+4\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+               \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat A\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t\PYZhy{}1\PYZcb{}\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}latex}\PY{p}{(}\PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{escape}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:xlabel='\$\textbackslash{}\textbackslash{}sqrt\{A\_t\}\$'>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:xlabel='\$t\$'>
+    \end{Verbatim}
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_61_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_61_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tabular}{rrrrr}
+\toprule
+ $t$ &  $A_t$ &  $\frac{K^2}{16}t^2+4$ &  $A_{t+1}-A_{t-1}$ &  $\hat A_{t+1}-\hat A_{t-1}$ \\
+\midrule
+   0 &      4 &                  4.000 &                NaN &                          NaN \\
+   1 &      8 &                  8.826 &               20.0 &                       19.306 \\
+   2 &     24 &                 23.306 &               38.0 &                       39.437 \\
+   3 &     46 &                 47.437 &               60.0 &                       57.222 \\
+   4 &     84 &                 81.222 &               80.0 &                       78.660 \\
+   5 &    126 &                124.660 &               92.0 &                       93.750 \\
+   6 &    176 &                177.750 &              122.0 &                      114.493 \\
+   7 &    248 &                240.493 &              150.0 &                      136.889 \\
+   8 &    326 &                312.889 &              172.0 &                      146.937 \\
+   9 &    420 &                394.937 &                NaN &                          NaN \\
+\bottomrule
+\end{tabular}
+
+    \hypertarget{ejercicio-6-eliminaciuxf3n-de-penicilina}{%
+\section*{Ejercicio 6: Eliminación de
+Penicilina}\label{ejercicio-6-eliminaciuxf3n-de-penicilina}}
+
+Se ingiere una pastilla de 500 miligramos de penicilina e ingresa
+inmediatamente al intestino. Cada cinco minutos después de la ingestión
+de la píldora. - El 10 \% de la penicilina en el intestino al comienzo
+del período se absorbe en el plasma. - El riñón elimina el 15 \% de la
+penicilina en el plasma al comienzo del período.
+
+Sea \(I_t\) la cantidad de penicilina en el intestino y \(S_t\) la
+cantidad de penicilina en el plasma al final del período de cinco
+minutos después de la ingestión de la píldora, ambos en miligramos.
+
+    \hypertarget{condiciones-iniciales}{%
+\subsection*{Condiciones iniciales}\label{condiciones-iniciales}}
+
+\[I_0 = 500,\] \[S_0 = 0.\]
+
+    \hypertarget{cambio-de-penicilina-por-periodo-de-tiempo}{%
+\subsection*{Cambio de penicilina por periodo de
+tiempo}\label{cambio-de-penicilina-por-periodo-de-tiempo}}
+
+Con \(0\) penicilina ingerida entre periodos, la penicilina agregada al
+intestino es \(0\). Pero se elimina \(10\%\) por el plasma.
+\[I_{t+1}-I_t = -0.10 I_t.\]
+
+En cambio en el plasma, se agregan \(10\%\) del intestino, y el riñon
+elimina \(15\%\) de la plasma. \[S_{t+1}-S_t = 0.10 I_t -0.15 S_t.\]
+
+    \hypertarget{ejercicio-7.}{%
+\section*{Ejercicio 7.}\label{ejercicio-7.}}
+
+Se remplaza la notación del sistema de a) y de b) por la de los
+siguientes respectivos sistemas equivalentes. \[A_0 = 0,\]
+\[A_{t+1} = 100+0.2 A_t.\] \[B_0 = 0,\] \[B_{t+1} = 10 -0.1 B_t.\]
+
+    \hypertarget{dar-los-tuxe9rminos-01234-para-cada-sistema}{%
+\subsection*{\texorpdfstring{1. Dar los términos \(0,1,2,3,4\) para cada
+sistema}{1. Dar los términos 0,1,2,3,4 para cada sistema}}\label{dar-los-tuxe9rminos-01234-para-cada-sistema}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{A} \PY{o}{=} \PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{l+m+mi}{100}\PY{o}{+}\PY{l+m+mf}{0.2}\PY{o}{*}\PY{n}{a}
+\PY{n}{B} \PY{o}{=} \PY{k}{lambda} \PY{n}{b}\PY{p}{:} \PY{l+m+mi}{10}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.1}\PY{o}{*}\PY{n}{b}
+
+\PY{k}{def} \PY{n+nf}{recur}\PY{p}{(}\PY{n}{f}\PY{p}{,} \PY{n}{f\PYZus{}0}\PY{p}{,} \PY{n}{t}\PY{p}{)}\PY{p}{:}
+    \PY{n}{seq} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:}
+        \PY{n}{f\PYZus{}0} \PY{o}{=} \PY{n}{f}\PY{p}{(}\PY{n}{f\PYZus{}0}\PY{p}{)}
+        \PY{n}{seq}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{f\PYZus{}0}\PY{p}{)}
+    \PY{k}{return} \PY{n}{seq}
+
+\PY{n}{Datos7} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{t}\PY{p}{,}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{:} \PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{p}{,}
+                 \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{n}{recur}\PY{p}{(}\PY{n}{A}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{,}\PY{n}{recur}\PY{p}{(}\PY{n}{B}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+             \PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}A\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}print(Datos7.to\PYZus{}latex(index=False, escape=False))}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{rrr}
+\toprule
+ $t$ &  $A_t$ &  $B_t$ \\
+\midrule
+   0 & 100.00 & 10.000 \\
+   1 & 120.00 &  9.000 \\
+   2 & 124.00 &  9.100 \\
+   3 & 124.80 &  9.090 \\
+   4 & 124.96 &  9.091 \\
+\bottomrule
+\end{tabular}
+
+    \hypertarget{encontrar-el-valor-de-equilibrio-para-cada-sistema}{%
+\subsection*{2. Encontrar el valor de equilibrio para cada
+sistema}\label{encontrar-el-valor-de-equilibrio-para-cada-sistema}}
+
+En un sistema
+
+\[W_{t+1} = w + k W_t,\]
+
+el punto de equilibrio \(W\) es tal que \(W = W_{t+1} = W_t\) es decir
+
+\[W = w + kW.\]
+
+Cuando \(k\neq 1\),
+
+\[W = \frac{w}{1-k}.\]
+
+(Usualmente se usa \(K\) en lugar de \(k\).)
+
+    Sustituyendo los valores del sistema de a) y b) sus puntos de equilibrio
+son respectivamente
+
+\[A = \frac{100}{0.8} = 125,\]
+
+\[B = \frac{10}{1.1} = 9.\overline{09}.\]
+
+    \hypertarget{escribir-ecuaciuxf3n-soluciuxf3n-para-cada-sistema}{%
+\subsection*{3. Escribir ecuación solución para cada
+sistema}\label{escribir-ecuaciuxf3n-soluciuxf3n-para-cada-sistema}}
+
+Al sistema
+
+\[W_{t+1} = w + k W_t,\]
+
+se le resta la ecuación
+
+\(W = w + kW\) para obtener \[W_{t+1}-W = k W_t-kW.\]
+
+Se denota a \(W_t-W\) como \(D_t\) y la ecuación anterior se reduce a
+una cuya solución ya conocemos.
+
+\[D_{t+1} = k D_t,\]
+
+\[D_{t+1}-D_t = (1-k) D_t.\]
+
+Con solución
+
+\[D_t = k^t D_0.\]
+
+O escrito respecto de \(W_t\)
+
+\[W_t = W+ k^t (W_0-W).\]
+
+    Sustituyendo los valores para el sistema a) y b) tenemos respectivamente
+las ecuaciones de solución
+
+\[A_t = 125- 0.2^t \cdot 125,\]
+
+\[B_t = 9.\overline{09}- (-0.1)^t \cdot9.\overline{09}.\]
+
+    \hypertarget{calcular-a_100-y-b_100}{%
+\subsection*{\texorpdfstring{4. Calcular \(A_{100}\) y
+\(B_{100}\)}{4. Calcular A\_\{100\} y B\_\{100\}}}\label{calcular-a_100-y-b_100}}
+
+    \[A_{100} =125.0,\] \[B_{100} =9.090909090909092.\]
+
+    \hypertarget{tiempo-de-reducciuxf3n-a-la-mitad-de-los-sistemas}{%
+\subsection*{5. Tiempo de reducción a la mitad de los
+sistemas}\label{tiempo-de-reducciuxf3n-a-la-mitad-de-los-sistemas}}
+
+    Si \(t\) es tal que \(W_{t+t_0}-0.5 W_{t_0}=0\), \(t\) es el tiempo de
+reducción a la mitad para el sistema de \(W_t\) desde el tiempo \(t_0\).
+La ecuación
+
+\[W_{t+t_0}-0.5 W_{t_0}=0\]
+
+se puede reescribir con la solución del sistema como
+
+\[W+ k^{t+t_0} (W_0-W) -0.5\left[W+ k^{t_0} (W_0-W)\right] = 0,\]
+\[0.5W+(k^{t+t_0}-0.5k^{t_0}) (W_0-W)= 0,\]
+
+\[0.5W+k^{t_0}(k^{t}-0.5) (W_0-W)= 0.\]
+
+De donde si \(W_0\neq W\) y \(k> 0\)
+
+\[2k^{t} = -\frac{W}{k^{t_0}(W_0-W)}+1,\]
+
+    \[\log(2)+t \log(k) = \log\left[-\frac{W}{k^{t_0}(W_0-W)}+1\right],\]
+
+    \[t= \frac{\log\left[-\frac{W}{k^{t_0}(W_0-W)}+1\right]-\log{2}}{\log{k}}.\]
+
+    Si alguno de los logaritmos no está definido entonces no hay tiempo de
+reducción a la mitad para el sistema desde el tiempo \(t_0\). Solo está
+definido \(t\) cuando
+
+\[1> \frac{W}{k^{t_0}(W_0-W)},\] \[k^{t_0}(W_0-W)> W,\]
+\[W_0> \left(k^{-t_0}+1\right)W.\]
+
+    Para el sistema a) no hay tiempo de reducción a la mitad porque
+\(A_0=0\) pero el lado derecho de la condición anterior es positivo pues
+\(k=0.2\):
+
+\[0> \left(0.2^{-t_0}+1\right)125\]
+
+siempre es falso.
+
+Para el sistema b) falla la condición desde antes porque \(k<0\).
+
+    \hypertarget{ejercicio-8.}{%
+\section*{Ejercicio 8.}\label{ejercicio-8.}}
+
+El modelo original tenía una ecuación dinámica para la cantidad de
+químicos \(W_t\) en el lago en kg, en el día \(t\):
+\[W_{t+1}-W_t = 100-5\times 10^{-4} W_t.\] Donde \(5\times 10^{-4}\) era
+por la proporcionalidad de la salida de químicos con el flujo de agua a
+través del lago y la concentración de químicos de ese día. Mantenemos
+esta constante para la salida de químicos y se siguen virtiendo 100 kg
+de químicos al lago. Pero ahora imitando al modelo de la eliminación de
+penicilina, separamos al lago en una proximidad de la fábrica, y ``el
+resto del lago'' donde la concentración de químicos se vuelve uniforme.
+
+Suponemos que solo de entre los químicos en el resto del lago es de
+dónde los químicos salen del lago. Sean \(P_t\) los químicos diluidos en
+la proximidad de la fábrica, y \(R_t\) los químicos en el resto del lago
+al día; ambos en kilogramos. Entonces salen \(5\times 10^{-4} R_t\) kg
+de químicos del lago al día.
+
+Es supuesto del ejercicio que cada 10 días 100kg de químico se mezclan
+uniformemente en la totalidad del lago. En nuestro modelo esto
+corresponde a que salen 10kg de la proximidad de la fabrica hacía el
+resto del lago al día.
+
+Entonces en un día, en la proximidad del lago entran 100kg de la
+fabrica, y salen 10kg a diluirse al resto del lago.
+\[P_{t+1}-P_t = -10+100 = 90.\]
+
+En el resto del lago en un día, se añaden 10kg de la proximidad de la
+fabrica que se diluyen uniformemente; y así 100kg en 10 días son los que
+se diluyen en el lago uniformemente. Pero también sale una proporción de
+los químicos presentes ese día por el flujo del agua, como hemos dicho
+\(5\times 10^{-4} R_t\). \[R_{t+1}-R_t = 10-5\times 10^{-4} R_t.\]
+
+    Estas ecuaciones son independientes una de la otra: Cada día 90kg más se
+acumulan en una proximidad de la fábrica mientras que el resto del lago
+está siendo vertido con solo 10kg de químicos al día, expulsando la
+misma cantidad que en el modelo original.
+
+    Si se ignora el requísito de que solo 100kg cada 10 días se diluyan en
+el lago, podemos hacer proporcional la cantidad de químicos que se
+diluye al resto del lago con la cantidad de químicos en la proximidad
+del lago. Digamos que \(10\%\) del contenido químico en la proximidad
+del lago es diluido en el resto del lago cada día. Entonces el sistema
+sería
+
+\[P_{t+1}-P_t = 100-0.1P_t,\]
+\[R_{t+1}-R_t = 0.1P_t -5\times 10^{-4} R_t.\]
+
+    \hypertarget{ejercicio-9.}{%
+\section*{Ejercicio 9.}\label{ejercicio-9.}}
+
+Sea \(P_t\) es la población de codornices en el año \(t\). La
+descripción del fenómeno nos dice:
+
+\[P_{t+1} = -1000+1.2P_t.\]
+
+El punto de equilibrio \(E\) si existe cumple que \(E=P_{t+1}=P_{t}\) o
+
+\[E = -1000+1.2E,\] \[E = \frac{1000}{0.2} = 5000.\]
+
+Como resolvimos en el ejercicio 7.3, la solución al sistema es entonces
+
+\[P_t = 5000+1.2^t\cdot(P_0-5000).\]
+
+    \begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Si \(P_0=5000\) la población se mantiene constante, en 5 años se tiene
+  la misma cantidad de población.
+\item
+  Si \(P_0=6000\), en 5 años se tiene
+  \(P_5= 5000+1.2^5\cdot 1000=7488.32\) de población o \(7488\)
+  redondeando.
+\item
+  Si \(P_0=4000\), disminuye la población; en 5 años hay
+  \(P_5=5000-1.2^t\cdot 1000=2511\) aves (redondeando).
+\end{enumerate}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
