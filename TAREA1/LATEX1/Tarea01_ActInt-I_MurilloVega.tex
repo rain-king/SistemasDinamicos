@@ -1,0 +1,1177 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage[utf8]{inputenc}
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Actividades Interdisciplinarias I, Tarea I}
+    
+    
+    
+    \author{Murillo Vega, Gustavo\\ Peñuelas Alvarez, Adnan Eliacit}
+    \date{31 de Agosto 2022}
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{crecimiento-de-la-bacteria-v.-natriegens-en-medio-de-cultivo-con-ph-de-7.85}{%
+\section{\texorpdfstring{Crecimiento de la bacteria \emph{V.
+natriegens} en medio de cultivo con pH de
+7.85}{1. Crecimiento de la bacteria V. natriegens en medio de cultivo con pH de 7.85}}\label{crecimiento-de-la-bacteria-v.-natriegens-en-medio-de-cultivo-con-ph-de-7.85}}
+
+    En el experimento se recopilarón los siguientes datos del crecimiento
+de la población de bacterias. Donde ``Índice de Tiempo'' se refiere a
+intervalos de 16 minutos.
+
+    \begin{longtable}[]{@{}lll@{}}
+\toprule
+Tiempo (minutos) & Índice de Tiempo & Densidad de Población \\
+\midrule
+\endhead
+0 & 0 & 0.028 \\
+16 & 1 & 0.047 \\
+32 & 2 & 0.082 \\
+48 & 3 & 0.141 \\
+64 & 4 & 0.240 \\
+80 & 5 & 0.381 \\
+\bottomrule
+\end{longtable}
+
+    \hypertarget{mathrmi-repitase-el-anuxe1lisis-de-datos-visto-en-clases-para-esta-tabla.}{%
+\subsection{\texorpdfstring{\(\mathrm{i}\)) Repitase el análisis de
+datos visto en clases para esta
+tabla.}{\textbackslash mathrm\{i\}) Repitase el análisis de datos visto en clases para esta tabla.}}\label{mathrmi-repitase-el-anuxe1lisis-de-datos-visto-en-clases-para-esta-tabla.}}
+
+    \hypertarget{notaciuxf3n}{%
+\subsubsection{Notación}\label{notaciuxf3n}}
+
+Usamos \(t\) para denotar el intervalo de tiempo de 16 minutos en que se
+mide la densidad de población \(B_t\); dónde \(B_t\) se mide al inicio
+del intervalo y \(t=0\) es el primer intervalo. Así \(B_t\) ha sido
+medido a los \(t\times 16\) minutos. Usamos \(\Delta\) para asociar el
+símbolo \(\Delta X_y\) con \(X_{y+1}-X_y\) por igualdad.
+
+    \hypertarget{gruxe1ficas-de-datos}{%
+\subsubsection{Gráficas de Datos}\label{gruxe1ficas-de-datos}}
+
+Aplicando transformaciones a los datos esperamos encontrar una relación
+lineal. Gran parte del código no es interesante y es más para obtener las gráficas o tablas. Por experimentar
+con el software al final conocemos formas de hacer el trabajo más compacto, pero por no darse a la tarea de romper cosas y repararlas se deja para cuando haya más tiempo.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} !! Variables Globales: Tabla1, Tabla2}
+\PY{k}{def} \PY{n+nf}{MostrarGraficaTabla}\PY{p}{(}\PY{n}{tabla}\PY{p}{,} \PY{n}{nombre}\PY{o}{=}\PY{k+kc}{None}\PY{p}{,} \PY{n}{ticks}\PY{o}{=}\PY{k+kc}{None}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{k+kc}{None}\PY{p}{,} \PY{n}{dotted}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,}
+                       \PY{n}{pointsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{G} \PY{o}{=} \PY{n}{points}\PY{p}{(}\PY{n}{tabla}\PY{p}{,} \PY{n}{rgbcolor}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{pointsize}\PY{o}{=}\PY{n}{pointsize}\PY{p}{,} \PY{n}{legend\PYZus{}label}\PY{o}{=}\PY{n}{label}\PY{p}{)}
+    \PY{k}{if} \PY{n}{dotted}\PY{p}{:}
+        \PY{n}{G} \PY{o}{+}\PY{o}{=} \PY{n}{list\PYZus{}plot}\PY{p}{(}\PY{n}{tabla}\PY{p}{,} \PY{n}{plotjoined}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{rgbcolor}\PY{o}{=}\PY{p}{(}\PY{l+m+mf}{0.6}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+    \PY{n}{show}\PY{p}{(}\PY{n}{G}\PY{p}{,} \PY{n}{title}\PY{o}{=}\PY{n}{nombre}\PY{p}{,} \PY{n}{ticks}\PY{o}{=}\PY{n}{ticks}\PY{p}{,}
+                \PY{n}{figsize}\PY{o}{=}\PY{n}{figsize}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{n}{fontsize}\PY{p}{,} \PY{n}{dpi}\PY{o}{=}\PY{l+m+mi}{120}\PY{p}{)}
+    
+\PY{k}{def} \PY{n+nf}{GraficaTabla}\PY{p}{(}\PY{n}{tabla}\PY{p}{,} \PY{n}{nombre}\PY{o}{=}\PY{k+kc}{None}\PY{p}{,} \PY{n}{ticks}\PY{o}{=}\PY{k+kc}{None}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{k+kc}{None}\PY{p}{,} \PY{n}{dotted}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,}
+                \PY{n}{pointsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{G} \PY{o}{=} \PY{n}{points}\PY{p}{(}\PY{n}{tabla}\PY{p}{,} \PY{n}{rgbcolor}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{pointsize}\PY{o}{=}\PY{n}{pointsize}\PY{p}{,} \PY{n}{legend\PYZus{}label}\PY{o}{=}\PY{n}{label}\PY{p}{)}
+    \PY{k}{if} \PY{n}{dotted}\PY{p}{:}
+        \PY{n}{G} \PY{o}{+}\PY{o}{=} \PY{n}{list\PYZus{}plot}\PY{p}{(}\PY{n}{tabla}\PY{p}{,} \PY{n}{plotjoined}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{rgbcolor}\PY{o}{=}\PY{p}{(}\PY{l+m+mf}{0.6}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{plot}\PY{p}{(}\PY{n}{G}\PY{p}{)}
+    
+\PY{n}{Tabla1} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{P}\PY{p}{:} \PY{p}{(}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n+nb}{float}\PY{p}{(}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+        \PY{p}{[}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mf}{0.028}\PY{p}{)}\PY{p}{,}
+        \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mf}{0.047}\PY{p}{)}\PY{p}{,}
+        \PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mf}{0.082}\PY{p}{)}\PY{p}{,}
+        \PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mf}{0.141}\PY{p}{)}\PY{p}{,}
+        \PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mf}{0.240}\PY{p}{)}\PY{p}{,}
+        \PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mf}{0.381}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+
+
+\PY{n}{Tabla2} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}
+\PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n}{Tabla2}\PY{o}{.}\PY{n}{append}\PY{p}{(} \PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{Tabla1}\PY{p}{[}\PY{n}{t}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{Tabla1}\PY{p}{[}\PY{n}{t}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{p}{)} \PY{c+c1}{\PYZsh{} \PYZlt{}\PYZhy{} aumento B\PYZus{}\PYZob{}t+1\PYZcb{}\PYZhy{}B\PYZus{}t}
+    
+    
+\PY{n}{MostrarGraficaTabla}\PY{p}{(}\PY{n}{Tabla1}\PY{p}{,} \PY{n}{nombre}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fig. 1 \PYZdl{}B\PYZus{}t\PYZdl{} contra \PYZdl{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{ticks} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{k+kc}{None}\PY{p}{]}\PY{p}{)}
+\PY{n}{MostrarGraficaTabla}\PY{p}{(}\PY{n}{Tabla2}\PY{p}{,} \PY{n}{nombre}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fig. 2 \PYZdl{}B\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}B\PYZus{}t\PYZdl{} contra \PYZdl{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{ticks} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{k+kc}{None}\PY{p}{]}\PY{p}{,} \PY{n}{dotted} \PY{o}{=} \PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_6_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_6_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Se observa de la figura 1 que cada vez está más separado un valor de
+otro, con lo que el crecimiento se hace cada vez mayor. Pero de la
+figura 2 se observa que el crecimiento \(B_{t+1}-B_t\) tampoco es lineal
+sobre el tiempo.
+
+Como \(B_t\) también aumenta con el tiempo, se piensa que podría
+relacionarse mejor (linealmente) con \(B_{t+1}-B_{t}\) que \(t\). Dado
+que ambas son cantidades que aumentan con el tiempo.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} !! Variable Global: Tabla3 !!}
+\PY{n}{Tabla3} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}
+\PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n}{Tabla3}\PY{o}{.}\PY{n}{append}\PY{p}{(} \PY{p}{(}\PY{n}{Tabla1}\PY{p}{[}\PY{n}{t}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{Tabla2}\PY{p}{[}\PY{n}{t}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{p}{)}
+    
+\PY{n}{MostrarGraficaTabla}\PY{p}{(}\PY{n}{Tabla3}\PY{p}{,} \PY{n}{nombre}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fig. 3 \PYZdl{}B\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{t+1\PYZcb{}\PYZhy{}B\PYZus{}t\PYZdl{} contra \PYZdl{}B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_8_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Se puede observar que estos datos muestran una mejor distribución lineal
+que los de la figura 1 o 2.
+
+    \hypertarget{ecuaciuxf3n-dinuxe1mica}{%
+\subsubsection{Ecuación Dinámica}\label{ecuaciuxf3n-dinuxe1mica}}
+
+Por ahora usaremos \(\hat B_t\) para referirnos a la aproximación del
+valor \(B_t\) dado por un modelo lineal. \(k\) se refiere a cualquier
+pendiente de la recta de este modelo (recta que aproxima los datos de la
+figura 3). De manera que la ecuación de la recta será descrita por una
+ecuación en terminos de \(y = \Delta \hat B_t\) y \(x = \hat B_t\), de
+la forma \(y = kx+b\) si \(k\) es la pendiente y \(b\) es alguna
+constante real. Es decir
+
+\[\Delta \hat B_t = k \hat B_t +b,\] o en términos de meramente las
+densidades \[\hat B_{t+1} = (1+k)\hat B_t +b.\]
+
+Sea \(K = 1+k\), en la ecuación anterior:
+
+    \[\hat B_{t+1} = K\hat B_t +b.\] Luego para \(t = n = 1,2,\ldots\) \[
+    \hat B_n = K \hat B_{n-1}+b = K \left(K \hat B_{n-2} +b\right)+b = K^2 \hat B_{n-2}+Kb+b = \ldots \\
+    = K^n \hat B_0+ b\sum^{n-1}_{j=0}K^j.
+\] Sin embargo para \(n=0\) lo anterior nos da la identidad ignorando
+las igualdades intermedias. Por lo que también es válido en ese caso
+usar la última expresión.
+
+Si \(K\neq 1\), (que pasa solo cuando \(k=0\), y no estamos considerando
+valores tan bajos) \[
+    \hat B_n = K^n \hat B_0+ b\frac{1-K^n}{1-K}.
+\]
+
+Así la solución de la ecuación dinámica de \(t\) propuesta al inicio de
+esta sección es \[
+    \hat B_t = (1+k)^t B_0 +b \frac{(1+k)^t-1}{k} \\
+    = (1+k)^t \left(0.028 +\frac{b}{k}\right)-\frac{b}{k}.
+\]
+
+Si escogemos \(b\) tal que la recta pasa por un punto de los datos
+\((\hat B_t, \Delta \hat B_t) = (x, y)\) con \(x= B_t, y=\Delta B_t\);
+tenemos de la primer ecuación en esta sección que
+
+\[b = y -k x.\]
+
+Por lo que podemos ajustar este modelo solo por el parámetro \(k\neq 0\)
+y escoger algún punto \((x,y)\) (o valor de \(b\)). Pero como afecta
+solo como constante y el rango de \(b\) es pequeño con los datos
+considerados se toma como 0.
+
+    \hypertarget{pendiente}{%
+\subsubsection{Pendiente}\label{pendiente}}
+
+Para \(t=0,1,2,3\): La pendiente \(m_t\) de la recta que conecta
+\((B_t,\Delta B_t)\) con \((B_{t+1}, \Delta B_{t+1})\) es
+\[\frac{\Delta B_{t+1} - \Delta B_t}{B_{t+1} - B_t} = \frac{\Delta B_{t+1}-\Delta B_t}{\Delta B_t}.\]
+O lo que es lo mismo \[m_t = \frac{\Delta B_{t+1}}{\Delta B_t}-1.\]
+
+    \textbf{Figura 4.}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\(t\) & \(B_t\) & \(\Delta B_t\) & \(m_t\) \\
+\midrule
+\endhead
+0 & 0.028 & 0.019 & 0.842 \\
+1 & 0.047 & 0.035 & 0.686 \\
+2 & 0.082 & 0.059 & 0.678 \\
+3 & 0.141 & 0.099 & 0.424 \\
+4 & 0.240 & 0.141 & \\
+5 & 0.381 & & \\
+\bottomrule
+\end{longtable}
+
+    Para tomar una buena pendiente \(k\) podríamos usar la mediana ya que da
+la coincidencia que tres puntos son casi colineales en la figura 3. Para
+ajustar qué tanto se parece la pendiente al promedio o a la mediana
+tomamos distintos valores de \(p\) en la función de promedio ponderado
+definida en el código. Si \(p\) es 0 el promedio ponderado es el normal,
+si \(p\) es grande entonces los valores lejanos de la media tienen más
+peso.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} !! Variable Global: lista\PYZus{}m !!}
+\PY{n}{lista\PYZus{}m} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{p}{)}
+\PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Tabla3}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{lista\PYZus{}m}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{Tabla3}\PY{p}{[}\PY{n}{t}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{Tabla3}\PY{p}{[}\PY{n}{t}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{}promedio ponderado por inverso de distancia promedio (elevado a potencia p)}
+\PY{c+c1}{\PYZsh{}cuando mayor sea p, mayor la influencia de la distancia}
+\PY{c+c1}{\PYZsh{}cuando p = 0, es simplemente el promedio de pesos iguales}
+\PY{c+c1}{\PYZsh{}https://en.wikipedia.org/wiki/Inverse\PYZus{}distance\PYZus{}weighting}
+
+\PY{c+c1}{\PYZsh{} Cuando se usa se imprime una tabla con los pesos que se le pone a cada valor por default}
+\PY{c+c1}{\PYZsh{} Los digitos son solo para los datos que se imprimen, no el valor regresado por la función}
+\PY{k}{def} \PY{n+nf}{promedio\PYZus{}ponderado}\PY{p}{(}\PY{n}{conjunto}\PY{p}{,} \PY{n}{p}\PY{p}{,} \PY{n}{verbose}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{digitos}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{nombre}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+    \PY{n}{promedio} \PY{o}{=} \PY{n}{mean}\PY{p}{(}\PY{n}{conjunto}\PY{p}{)}
+    \PY{k}{if} \PY{n}{verbose}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{n}{nombre}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Valor}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s2}{Peso}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{conjunto}\PY{p}{)}
+    \PY{n}{suma\PYZus{}pesos} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{suma\PYZus{}valor\PYZus{}peso} \PY{o}{=} \PY{l+m+mi}{0}
+
+    \PY{k}{for} \PY{n}{valor} \PY{o+ow}{in} \PY{n}{conjunto}\PY{p}{:}
+        \PY{k}{if} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{valor} \PY{o}{\PYZhy{}} \PY{n}{promedio}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:} \PY{k}{return} \PY{n}{valor} 
+        \PY{n}{suma\PYZus{}pesos} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}\PY{o}{/}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{valor} \PY{o}{\PYZhy{}} \PY{n}{promedio}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{p}
+        \PY{n}{suma\PYZus{}valor\PYZus{}peso} \PY{o}{+}\PY{o}{=} \PY{n}{valor}\PY{o}{/}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{valor} \PY{o}{\PYZhy{}} \PY{n}{promedio}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{p}
+        \PY{k}{if} \PY{n}{verbose}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{valor}\PY{p}{,} \PY{n}{digitos}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{round}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{valor} \PY{o}{\PYZhy{}} \PY{n}{promedio}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{p}\PY{p}{,} \PY{n}{digitos}\PY{p}{)}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{suma\PYZus{}valor\PYZus{}peso}\PY{o}{/}\PY{n}{suma\PYZus{}pesos}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Como ejemplo, el promedio con pesos iguales para cada pendiente es el
+siguiente.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{promedio\PYZus{}ponderado}\PY{p}{(}\PY{n}{lista\PYZus{}m}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+0.65750701870238
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{graficas-de-soluciones}{%
+\subsubsection{Graficas de Soluciones}\label{graficas-de-soluciones}}
+
+    Tomamos un promedio ponderado de las pendientes y ajustamos a ojo por
+una mejor solución.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} !! Var. Global SolucionDensidad, B\PYZus{}0, digitos\PYZus{}entrada, formato !!}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{n}{pd}\PY{o}{.}\PY{n}{set\PYZus{}option}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{display.precision}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{3}\PY{n}{r}\PY{p}{)}
+\PY{n}{pd}\PY{o}{.}\PY{n}{set\PYZus{}option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{display.latex.repr}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{k+kc}{True}\PY{p}{)}
+
+\PY{n}{B\PYZus{}0} \PY{o}{=} \PY{n}{Tabla1}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+
+\PY{n}{digitos\PYZus{}entrada} \PY{o}{=} \PY{l+m+mi}{4}
+\PY{n}{digitos\PYZus{}salida} \PY{o}{=} \PY{l+m+mi}{3}
+
+\PY{k}{def} \PY{n+nf}{TablaRecta}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{b}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+    \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Delta }\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t = }\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{k}\PY{p}{,}\PY{n}{digitos\PYZus{}entrada}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{if} \PY{n}{b}\PY{o}{!=}\PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n}{y}\PY{o}{+}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{+(}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{b}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{y}\PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{P}\PY{p}{:} \PY{p}{(}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{k}\PY{o}{*}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{b}\PY{p}{,} \PY{n}{P}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{Tabla3}\PY{p}{)}\PY{p}{,}
+              \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Delta B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Tabla3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{df}
+
+\PY{n}{SolucionDensidad} \PY{o}{=} \PY{k}{lambda} \PY{n}{k}\PY{p}{,}\PY{n}{b}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{:} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+}\PY{n}{k}\PY{p}{)}\PY{o}{\PYZca{}}\PY{n}{t} \PY{o}{*}\PY{p}{(}\PY{n}{B\PYZus{}0} \PY{o}{+}\PY{n}{b}\PY{o}{/}\PY{n}{k}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{b}\PY{o}{/}\PY{n}{k}
+    
+\PY{k}{def} \PY{n+nf}{TablaDensidad}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{b}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+    \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t = (}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{y} \PY{o}{+}\PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+}\PY{n}{k}\PY{p}{,}\PY{n}{digitos\PYZus{}entrada}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{)\PYZca{}t}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{y} \PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{cdot}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{B\PYZus{}0}\PY{o}{+}\PY{n}{b}\PY{o}{/}\PY{n}{k}\PY{p}{,} \PY{n}{digitos\PYZus{}entrada}\PY{p}{)}\PY{p}{)}
+    \PY{k}{if} \PY{n}{b}\PY{o}{!=}\PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n}{y}\PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}(}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{b}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{y} \PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{P}\PY{p}{:} \PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{SolucionDensidad}\PY{p}{(}\PY{n}{k}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{p}{(}\PY{n}{t}\PY{o}{=}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{P}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{Tabla1}\PY{p}{)}\PY{p}{,}
+                      \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{n}{y}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+                     \PY{n}{index}\PY{o}{=}\PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Tabla1}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{df}
+
+\PY{k}{def} \PY{n+nf}{mostrarGraficaRecta}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{titulo}\PY{p}{,} \PY{n}{b}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+    \PY{n}{var}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{legend}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Delta }\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t = }\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{digitos\PYZus{}entrada}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{if} \PY{n}{b}\PY{o}{!=}\PY{l+m+mi}{0}\PY{p}{:} \PY{n}{legend}\PY{o}{+}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{+(}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{b}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{legend}\PY{o}{+}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{GraficaCambio} \PY{o}{=} \PY{n}{plot}\PY{p}{(}\PY{n}{k}\PY{o}{*}\PY{n}{t}\PY{o}{+}\PY{n}{b}\PY{p}{,} \PY{c+c1}{\PYZsh{} \PYZlt{}\PYZhy{} EC RECTA}
+                          \PY{c+c1}{\PYZsh{} t de 0 a max\PYZob{}x: (x,y) en Tabla3\PYZcb{}*1.1}
+                         \PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{max}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{P}\PY{p}{:} \PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{Tabla3}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{l+m+mf}{1.1}\PY{p}{)}\PY{p}{,}
+                         \PY{n}{legend\PYZus{}label}\PY{o}{=}\PY{n}{legend}\PY{p}{)}
+    \PY{n}{GraficaCambio}\PY{o}{.}\PY{n}{set\PYZus{}legend\PYZus{}options}\PY{p}{(}\PY{n}{font\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{)}
+    
+    \PY{n}{show}\PY{p}{(}\PY{n}{GraficaCambio}\PY{o}{+}\PY{n}{GraficaTabla}\PY{p}{(}\PY{n}{tabla}\PY{o}{=}\PY{n}{Tabla3}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Delta B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{pointsize}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{,}
+         \PY{n}{title}\PY{o}{=}\PY{n}{titulo}\PY{p}{,}
+         \PY{n}{figsize}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{,} \PY{n}{ticks}\PY{o}{=}\PY{p}{[}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{k+kc}{None}\PY{p}{]}\PY{p}{,} \PY{n}{axes\PYZus{}labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}B\PYZus{}t\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{k+kc}{None}\PY{p}{]}\PY{p}{,} \PY{n}{dpi}\PY{o}{=}\PY{l+m+mi}{120}\PY{p}{)}
+    \PY{k}{return} \PY{n}{TablaRecta}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{b}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{mostrarGraficaDensidad}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{titulo}\PY{p}{,} \PY{n}{b}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+    \PY{n}{var}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{legend} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t =}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+}\PY{n}{k}\PY{p}{,} \PY{n}{digitos\PYZus{}entrada}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZca{}t}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{cdot(}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{B\PYZus{}0}\PY{o}{+}\PY{n}{b}\PY{o}{/}\PY{n}{k}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{if} \PY{n}{b}\PY{o}{!=} \PY{l+m+mi}{0}\PY{p}{:} \PY{n}{legend} \PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}(}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{b}\PY{o}{/}\PY{n}{k}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{legend} \PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{GraficaDensidad} \PY{o}{=} \PY{n}{plot}\PY{p}{(}\PY{n}{SolucionDensidad}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{b}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{c+c1}{\PYZsh{} \PYZlt{}\PYZhy{} MODELO}
+                           \PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{max}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{P}\PY{p}{:} \PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{Tabla1}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{l+m+mf}{1.1}\PY{p}{)}\PY{p}{,}
+                           \PY{n}{legend\PYZus{}label}\PY{o}{=}\PY{n}{legend}\PY{p}{)}
+    \PY{n}{GraficaDensidad}\PY{o}{.}\PY{n}{set\PYZus{}legend\PYZus{}options}\PY{p}{(}\PY{n}{font\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{)}
+    
+    \PY{n}{show}\PY{p}{(}\PY{n}{GraficaDensidad}\PY{o}{+}\PY{n}{GraficaTabla}\PY{p}{(}\PY{n}{Tabla1}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{pointsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{,}
+         \PY{n}{title}\PY{o}{=}\PY{n}{titulo}\PY{p}{,}
+         \PY{n}{figsize}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{,} \PY{n}{axes\PYZus{}labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}t\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{k+kc}{None}\PY{p}{]}\PY{p}{,} \PY{n}{dpi}\PY{o}{=}\PY{l+m+mi}{120}\PY{p}{)}
+    \PY{k}{return} \PY{n}{TablaDensidad}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{b}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{b} \PY{o}{=} \PY{k}{lambda} \PY{n}{P}\PY{p}{,}\PY{n}{k}\PY{p}{:} \PY{n+nb}{float}\PY{p}{(}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{o}{*}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{c+c1}{\PYZsh{} y \PYZhy{}kx}
+
+\PY{k}{def} \PY{n+nf}{Graficas}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{n\PYZus{}fig}\PY{p}{,} \PY{n}{P}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{n}{r}\PY{p}{,}\PY{l+m+mi}{0}\PY{n}{r}\PY{p}{]}\PY{p}{,} \PY{n}{ajuste\PYZus{}b}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+    \PY{n}{b\PYZus{}redondeado} \PY{o}{=} \PY{n+nb}{round}\PY{p}{(}\PY{n}{b}\PY{p}{(}\PY{n}{P}\PY{p}{,}\PY{n}{k}\PY{p}{)}\PY{o}{*}\PY{n}{ajuste\PYZus{}b}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}
+    \PY{n}{nombre} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Figura }\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{n\PYZus{}fig}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.1  Tasa de Crecimiento Relativo \PYZdl{}k=}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{digitos\PYZus{}entrada}\PY{p}{)}\PY{p}{)}
+    \PY{k}{if} \PY{n}{ajuste\PYZus{}b} \PY{o}{!=} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n}{nombre}\PY{o}{+}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,b=}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{b\PYZus{}redondeado}\PY{o}{*}\PY{n}{ajuste\PYZus{}b}\PY{p}{)}
+    \PY{n}{nombre}\PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{Tabla1} \PY{o}{=} \PY{n}{mostrarGraficaRecta}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{nombre}\PY{p}{,} \PY{n}{b}\PY{p}{(}\PY{n}{P}\PY{p}{,}\PY{n}{k}\PY{p}{)}\PY{o}{*}\PY{n}{ajuste\PYZus{}b}\PY{p}{)}
+    
+    \PY{n}{nombre} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Figura }\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{n\PYZus{}fig}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.2  Solución del Sistema Dinámico \PYZdl{}k=}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{digitos\PYZus{}entrada}\PY{p}{)}\PY{p}{)}
+    \PY{k}{if} \PY{n}{ajuste\PYZus{}b} \PY{o}{!=}\PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n}{nombre} \PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,b=}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{b}\PY{p}{(}\PY{n}{P}\PY{p}{,}\PY{n}{k}\PY{p}{)}\PY{o}{*}\PY{n}{ajuste\PYZus{}b}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+    \PY{n}{nombre}\PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{Tabla2} \PY{o}{=} \PY{n}{mostrarGraficaDensidad}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{nombre}\PY{p}{,} \PY{n}{b}\PY{p}{(}\PY{n}{P}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{o}{*}\PY{n}{ajuste\PYZus{}b}\PY{p}{)}
+    \PY{k}{return} \PY{n}{Tabla1}\PY{p}{,}\PY{n}{Tabla2}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Damos dos ajustes para el modelo. El primero dado por la figura 5 se
+ajusta para acercarse más a solo los puntos que parecen colineales. El
+de la figura 6 intenta minimizar la distancia de la recta a todos los
+puntos.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{k1} \PY{o}{=} \PY{n+nb}{float}\PY{p}{(}\PY{n}{promedio\PYZus{}ponderado}\PY{p}{(}\PY{n}{lista\PYZus{}m}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{p}{(}\PY{l+m+mf}{1.11}\PY{o}{+}\PY{l+m+mf}{80E\PYZhy{}4}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{counter} \PY{o}{=} \PY{l+m+mi}{3}
+
+\PY{k}{for} \PY{n}{tabla} \PY{o+ow}{in} \PY{n}{Graficas}\PY{p}{(}\PY{n}{k1}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{k+kc}{False}\PY{p}{:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{tabla}\PY{o}{.}\PY{n}{to\PYZus{}markdown}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{longtable}[]{@{}rrrr@{}}
+\toprule
+& \(\hat B_t\) & \(\Delta \hat B_t = 0.712\hat B_t\) & \(\Delta B_t\) \\
+\midrule
+\endhead
+0 & 0.028 & 0.0199346 & 0.019 \\
+1 & 0.047 & 0.0334617 & 0.035 \\
+2 & 0.082 & 0.05838 & 0.059 \\
+3 & 0.141 & 0.100385 & 0.099 \\
+4 & 0.24 & 0.170868 & 0.141 \\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}rrr@{}}
+\toprule
+& \(\hat B_t = (1.712)^t\cdot0.028\) & \(B_t\) \\
+\midrule
+\endhead
+0 & 0.028 & 0.028 \\
+1 & 0.0479346 & 0.047 \\
+2 & 0.0820617 & 0.082 \\
+3 & 0.140486 & 0.141 \\
+4 & 0.240504 & 0.24 \\
+5 & 0.411732 & 0.381 \\
+\bottomrule
+\end{longtable}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{k2} \PY{o}{=} \PY{n}{promedio\PYZus{}ponderado}\PY{p}{(}\PY{n}{lista\PYZus{}m}\PY{p}{[}\PY{p}{:}\PY{p}{]}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{)}\PY{o}{+}\PY{n}{promedio\PYZus{}ponderado}\PY{p}{(}\PY{n}{lista\PYZus{}m}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mf}{1.11}\PY{p}{)}
+\PY{n}{k2} \PY{o}{=} \PY{n+nb}{float}\PY{p}{(}\PY{n}{k2}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)}
+
+\PY{n}{counter} \PY{o}{=} \PY{l+m+mi}{3}
+\PY{k}{for} \PY{n}{tabla} \PY{o+ow}{in} \PY{n}{Graficas}\PY{p}{(}\PY{n}{k2}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{k+kc}{False}\PY{p}{:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{tabla}\PY{o}{.}\PY{n}{to\PYZus{}markdown}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_25_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_25_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{longtable}[]{@{}rrrr@{}}
+\toprule
+& \(\hat B_t\) & \(\Delta \hat B_t = 0.6953\hat B_t\) &
+\(\Delta B_t\) \\
+\midrule
+\endhead
+0 & 0.028 & 0.0194684 & 0.019 \\
+1 & 0.047 & 0.0326792 & 0.035 \\
+2 & 0.082 & 0.0570147 & 0.059 \\
+3 & 0.141 & 0.0980375 & 0.099 \\
+4 & 0.24 & 0.166872 & 0.141 \\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}rrr@{}}
+\toprule
+& \(\hat B_t = (1.6953)^t\cdot0.028\) & \(B_t\) \\
+\midrule
+\endhead
+0 & 0.028 & 0.028 \\
+1 & 0.0474684 & 0.047 \\
+2 & 0.0804733 & 0.082 \\
+3 & 0.136426 & 0.141 \\
+4 & 0.231284 & 0.24 \\
+5 & 0.392096 & 0.381 \\
+\bottomrule
+\end{longtable}
+
+    El modelo preferido depende del conocimiento del experto en el área del
+experimento. Si el experto sabe que los datos de la tasa de crecimiento
+relativo se deben ajustar a una recta con un varianza bastante pequeña,
+se prefiere el modelo de la figura 5 y se ignora el último punto como
+error de medición. Pues tenemos en densidad, una diferencia con los
+datos de a lo mucho el último digito.
+
+El segundo modelo dado por la figura 6 se prefiere, si es el
+conocimiento del experto es que la varianza del experimento sí debería
+ser alta en algunos intervalos de tiempo. De manera que los datos
+anormales pueden ser bien medidos, y reducir la distancia a todos los
+puntos nos acercaría al valor esperado de un experimento en estas
+condiciones.
+
+    \hypertarget{ii-comparaciuxf3n-de-tasa-de-crecimiento-relativo-de-v.-natriegens-a-ph-7.85-con-tasa-de-crecimiento-relativo-23-a-ph-6.25}{%
+\subsection{ii) Comparación de Tasa de Crecimiento Relativo de V.
+natriegens a pH 7.85 con Tasa de Crecimiento Relativo 2/3 a pH
+6.25}\label{ii-comparaciuxf3n-de-tasa-de-crecimiento-relativo-de-v.-natriegens-a-ph-7.85-con-tasa-de-crecimiento-relativo-23-a-ph-6.25}}
+
+Comparamos los resultados anteriores con el modelo cuando \(k=2/3\).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{TablaComparacion}\PY{p}{(}\PY{n}{k\PYZus{}tuple}\PY{p}{,} \PY{n}{Datos}\PY{p}{)}\PY{p}{:}
+    \PY{n}{columnas} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{c+c1}{\PYZsh{} Convertir a string redondeado si float}
+    \PY{k}{def} \PY{n+nf}{k\PYZus{}display}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n+nb}{type}\PY{p}{(}\PY{n}{k}\PY{p}{)} \PY{o}{==} \PY{n+nb}{type}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{/}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n+nb}{str}\PY{p}{(}\PY{n}{k}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{k}{return} \PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+    \PY{n}{columnas}\PY{o}{.}\PY{n}{extend}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}
+        \PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{k}\PY{p}{:} \PY{n+nb}{str}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n}{k\PYZus{}display}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{hat B\PYZus{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{k\PYZus{}tuple}\PY{p}{)} \PY{p}{)}\PY{p}{)}
+
+    \PY{n}{df} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{P}\PY{p}{:} \PY{p}{[}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{Datos}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n}{k\PYZus{}tuple}\PY{p}{:}
+        \PY{k}{for} \PY{n}{fila} \PY{o+ow}{in} \PY{n}{df}\PY{p}{:}
+            \PY{n}{fila}\PY{o}{.}\PY{n}{insert}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n+nb}{float}\PY{p}{(}\PY{n}{k}\PY{o}{*}\PY{n}{fila}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+    \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{df}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{n}{columnas}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Datos}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{df}
+
+\PY{n}{Tabla12} \PY{o}{=} \PY{n}{TablaComparacion}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{/}\PY{l+m+mi}{3}\PY{p}{,} \PY{n+nb}{float}\PY{p}{(}\PY{n}{k1}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{Tabla3}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}Tabla12.to\PYZus{}clipboard()}
+\PY{c+c1}{\PYZsh{}Tabla122 = pd.read\PYZus{}clipboard()}
+\PY{c+c1}{\PYZsh{}print(Tabla122.to\PYZus{}markdown())}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{longtable}[]{@{}rrrr@{}}
+\toprule
+& \(\hat B_t\) & \(2/3\hat B_t\) & \(0.712\hat B_t\) \\
+\midrule
+\endhead
+0 & 0.019 & 0.013 & 0.028 \\
+1 & 0.031 & 0.022 & 0.047 \\
+2 & 0.055 & 0.039 & 0.082 \\
+3 & 0.094 & 0.067 & 0.141 \\
+4 & 0.16 & 0.114 & 0.24 \\
+\bottomrule
+\end{longtable}
+
+    En la tabla anterior \(B_t\) es para los datos de pH 7.85. Podemos
+observar que para una misma densidad de población \(B_t\), la tasa de
+crecimiento es siempre inferior para el pH 6.25.
+
+Sin embargo cuando \(t=4\) el modelo con tasa relativa de crecimiento
+\(k=2/3\) se asemeja más al dato medido para el pH de 7.85. De hecho la
+media normal para las posibles constantes \(k\) para el pH de 7.85 es
+\(0.657\) que es menor a \(2/3\).
+
+Por lo que bien podría ser que \(k=2/3\) sea una solución para el
+crecimiento de la bacteria a pH 7.85. Pero esto no significa que vayan a
+ser las mismas, pues \(k=2/3\) se ajusta a los datos de su experimento
+de pH 6.25 de manera similar que \(k=0.712\) se ajusta a los datos del
+experimento a pH 7.85.
+
+\textbf{Modelo con \(k=2/3\) comparado con los datos del experimento con
+pH 6.25}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\(t\) & \(\hat B_t\) & \(B_t\) \\
+\midrule
+\endhead
+0 & 0.022 & 0.022 \\
+1 & 0.037 & 0.036 \\
+2 & 0.061 & 0.06 \\
+3 & 0.102 & 0.101 \\
+4 & 0.17 & 0.169 \\
+5 & 0.238 & 0.266 \\
+\bottomrule
+\end{longtable}
+
+La diferencia es a lo más un último digito hasta el último dato que se
+ajusta peor. De manera que la diferencia entre las tasas de crecimientos
+está justificada bajo los mismos supuestos. Es decir, supuestos como que
+se debe ajustar mejor el modelo a los primeros puntos.
+
+    \hypertarget{b_t-b_t1-r-b_t1-tiene-la-misma-informaciuxf3n-que-b_t1-b_t-r-b_t}{%
+\section{\texorpdfstring{\(B_t − B_{t−1} = r B_{t−1}\) , tiene la
+misma información que
+\(B_{t+1} − B_t = r B_t\)}{2. B\_t − B\_\{t−1\} = r B\_\{t−1\} , tiene la misma información que B\_\{t+1\} − B\_t = r B\_t}}\label{b_t-b_t1-r-b_t1-tiene-la-misma-informaciuxf3n-que-b_t1-b_t-r-b_t}}
+
+\hypertarget{a-dado-r-y-b_0-encontrar-b_4-a-partir-de-las-ecuaciones-b_t-b_t1-r-b_t1-con-t1234.}{%
+\subsection{\texorpdfstring{a) Dado \(r\) y \(B_0\) encontrar \(B_4\) a
+partir de las ecuaciones \(B_t − B_{t−1} = r B_{t−1}\) con
+\(t=1,2,3,4\).}{a) Dado r y B\_0 encontrar B\_4 a partir de las ecuaciones B\_t − B\_\{t−1\} = r B\_\{t−1\} con t=1,2,3,4.}}\label{a-dado-r-y-b_0-encontrar-b_4-a-partir-de-las-ecuaciones-b_t-b_t1-r-b_t1-con-t1234.}}
+
+    Dadas las siguientes ecuaciones
+
+    \[B_1-B_{0}= r B_{0},\] \[B_2-B_{1}= r B_{1},\] \[B_3-B_{2}= r B_{2},\]
+\[B_4-B_{3}= r B_{3}.\]
+
+    Se tiene por sumar respectivamente y agrupar \(B_t,t=0,1,2,3\) que
+\[B_1= (1+r) B_{0},\] \[B_2= (1+r) B_{1},\] \[B_3= (1+r) B_{2},\]
+\[B_4= (1+r) B_{3}.\]
+
+De aquí meramente se sustituye en la derecha de \(B_4\) con las
+igualdades. \[B_4= (1+r) (1+r) B_{2},\]
+\[B_4= (1+r) (1+r) (1+r) B_{1} ,\]
+\[B_4= (1+r) (1+r) (1+r) (1+r) B_{0} ,\] \[B_4= (1+r)^4 B_0.\]
+
+    \hypertarget{prueba-por-inducciuxf3n}{%
+\subsubsection{Prueba por Inducción}\label{prueba-por-inducciuxf3n}}
+
+En general si una secuencia de reales \(\{B_t\}_{t\in\mathbb N}\) cumple
+que para un \(r\) fijo, \[B_t-B_{t-1}= r B_{t-1}, t\in\mathbb N\]
+
+Entonces también cumple que \[B_{t+1} -B_t= rB_t, t\in\mathbb Z^+.\]
+
+Si además \(r\neq 0\). Para \(t=0\) es cierto que \[B_t = (1+r)^t B_0.\]
+Si se cumple lo anterior para \(t\) no necesariamente \(0\), tenemos
+\[B_{t+1} -B_t= r B_t,\] \[B_{t+1} = (1+r)B_t.\] Y como para \(t\) hemos
+supuesto que \(B_t = (1+r)^t B_0,\)
+\[B_{t+1} = (1+r)\left[(1+r)^t B_0\right],\]
+\[B_{t+1} = (1+r)^{t+1} B_0.\] Por lo que también se cumple
+\(B_n = (1+r)^n B_0\) para \(n=t+1\) dado que se cumple para \(n=t\).
+Como es cierto para \(t=0\), por inducción es cierto para
+\(t\in\mathbb Z^+\), con el supuesto que
+\[B_t-B_{t-1}= r B_{t-1}, t\in\mathbb N.\]
+
+    \hypertarget{b-escribir-ecuaciones-para-b_40-en-los-siguientes-casos.}{%
+\subsection{\texorpdfstring{b) Escribir ecuaciones para \(B_{40}\) en
+los siguientes
+casos.}{b) Escribir ecuaciones para B\_\{40\} en los siguientes casos.}}\label{b-escribir-ecuaciones-para-b_40-en-los-siguientes-casos.}}
+
+\hypertarget{b_050-dado-que-b_t-b_t-1-0.2-b_t-1.}{%
+\subsubsection{\texorpdfstring{1) \(B_0=50\) dado que
+\(B_t-B_{t-1}= 0.2 B_{t-1}.\)}{1) B\_0=50 dado que B\_t-B\_\{t-1\}= 0.2 B\_\{t-1\}.}}\label{b_050-dado-que-b_t-b_t-1-0.2-b_t-1.}}
+
+Por lo que acabamos de probar, tomando \(r = 0.2\) tenemos que
+\[B_{40} = (1.2)^{40} \times 50.\]
+
+    \hypertarget{b_0-50-dado-que-b_t-b_t-1--0.1-b_t-1.}{%
+\subsubsection{\texorpdfstring{2) \(B_0 = 50\) dado que
+\(B_t-B_{t-1} = -0.1 B_{t-1}\).}{2) B\_0 = 50 dado que B\_t-B\_\{t-1\} = -0.1 B\_\{t-1\}.}}\label{b_0-50-dado-que-b_t-b_t-1--0.1-b_t-1.}}
+
+En lo que probamos anteriormente tomamos \(r= -0.1\):
+\[B_{40} = (0.9)^{40} \times 50.\]
+
+    \hypertarget{reacciuxf3n-en-cadena-de-la-polimerasa-para-copiar-segmentos-de-adn}{%
+\section{Reacción en Cadena de la Polimerasa para Copiar Segmentos de
+ADN}\label{reacciuxf3n-en-cadena-de-la-polimerasa-para-copiar-segmentos-de-adn}}
+
+    \hypertarget{descripciuxf3n-y-notaciuxf3n}{%
+\subsection{Descripción y Notación}\label{descripciuxf3n-y-notaciuxf3n}}
+
+Llamamos a un ciclo a la duplicación de una cantidad de ADN inicial. En
+notación matemática esto es que al terminar el ciclo \(n=0,1,\ldots\)
+hay una cantidad \(B_{n+1}=2B_n\) de ADN, dado que el ciclo inició con
+la cantidad \(B_n\) de ADN.
+
+    Con estos dos datos podemos deducir que habiendo pasado \(n\geq 0\)
+ciclos el proceso obedece que
+\[B_n = 2 B_{n-1} = 2^2 B_{n-2} =\ldots = 2^n B_0.\]
+
+(Ignorando las igualdades intermedias si \(B_{n-1}\) o \(B_{n-2}\) no
+está definido.)
+
+    Con una cantidad inicial \(B_0 = 10^{-12}\text{g}\) de ADN en el inicio
+del ciclo 0, tras 30 ciclos tenemos
+\(B_{30} = 2^{30}\times 10^{-12}\text{g}\) de ADN (al inicio del ciclo
+30).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{round}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{30}\PY{o}{*}\PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{12}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{12}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+0.001073741824
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Esto es \(0.001073741824\) gramos.
+
+    \hypertarget{crecimiento-exponencial-de-la-poblaciuxf3n-humana}{%
+\section{Crecimiento Exponencial de la Población
+Humana}\label{crecimiento-exponencial-de-la-poblaciuxf3n-humana}}
+
+    \hypertarget{descripciuxf3n-y-notaciuxf3n}{%
+\subsection{Descripción y Notación}\label{descripciuxf3n-y-notaciuxf3n}}
+
+\(t\) es el número de décadas después de 1940. \(P_t\) es la población
+en millones en el año \(1940+10t\). Sea \(\Delta P_t = P_{t+1}-P_t\).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{numpy} \PY{k+kn}{import} \PY{n}{array}
+\PY{c+c1}{\PYZsh{}Tabla41 = pd.read\PYZus{}clipboard()}
+\PY{c+c1}{\PYZsh{}Tabla41.to\PYZus{}dict()}
+\PY{n}{data} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}t\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{1940}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1950}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1960}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1970}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1980}\PY{p}{:} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{1990}\PY{p}{:} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{2000}\PY{p}{:} \PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{2010}\PY{p}{:} \PY{l+m+mi}{7}\PY{p}{\PYZcb{}}\PY{p}{,}
+ \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Poblacion \PYZdl{}10\PYZca{}6\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}\PY{l+m+mi}{1940}\PY{p}{:} \PY{l+m+mf}{2.3}\PY{n}{r}\PY{p}{,}
+  \PY{l+m+mi}{1950}\PY{p}{:} \PY{l+m+mf}{2.52}\PY{n}{r}\PY{p}{,}
+  \PY{l+m+mi}{1960}\PY{p}{:} \PY{l+m+mf}{3.02}\PY{n}{r}\PY{p}{,}
+  \PY{l+m+mi}{1970}\PY{p}{:} \PY{l+m+mf}{3.7}\PY{n}{r}\PY{p}{,}
+  \PY{l+m+mi}{1980}\PY{p}{:} \PY{l+m+mf}{4.45}\PY{n}{r}\PY{p}{,}
+  \PY{l+m+mi}{1990}\PY{p}{:} \PY{l+m+mf}{5.3}\PY{n}{r}\PY{p}{,}
+  \PY{l+m+mi}{2000}\PY{p}{:} \PY{l+m+mf}{6.06}\PY{n}{r}\PY{p}{,}
+  \PY{l+m+mi}{2010}\PY{p}{:} \PY{l+m+mf}{6.8}\PY{n}{r}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}
+\PY{n}{Tabla41} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{longtable}[]{@{}rrr@{}}
+\toprule
+& \(t\) & Poblacion \(10^6\) \\
+\midrule
+\endhead
+1940 & 0 & 2.3 \\
+1950 & 1 & 2.52 \\
+1960 & 2 & 3.02 \\
+1970 & 3 & 3.7 \\
+1980 & 4 & 4.45 \\
+1990 & 5 & 5.3 \\
+2000 & 6 & 6.06 \\
+2010 & 7 & 6.8 \\
+\bottomrule
+\end{longtable}
+
+    \hypertarget{a-probar-la-ecuaciuxf3n-contra-los-datos}{%
+\subsection{a) Probar la ecuación contra los
+datos}\label{a-probar-la-ecuaciuxf3n-contra-los-datos}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{var}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{points}\PY{p}{(}\PY{n}{Tabla41}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{rgbcolor}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{legend\PYZus{}label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Población \PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{times 10\PYZca{}6\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+     \PY{o}{+}\PY{n}{plot}\PY{p}{(}\PY{l+m+mf}{2.2}\PY{o}{*}\PY{l+m+mf}{1.19}\PY{o}{*}\PY{o}{*}\PY{n}{t}\PY{p}{,} \PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{)}\PY{p}{,} \PY{n}{legend\PYZus{}label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}P\PYZus{}t = 2.2}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{cdot 1.19\PYZca{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,}
+     \PY{n}{dpi}\PY{o}{=}\PY{l+m+mi}{120}\PY{p}{,} \PY{n}{axes\PYZus{}labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{k+kc}{None}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_50_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Comparacion} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{P}\PY{p}{:} \PY{p}{(}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{P}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n+nb}{float}\PY{p}{(}\PY{l+m+mf}{2.2}\PY{o}{*}\PY{l+m+mf}{1.19}\PY{o}{*}\PY{o}{*}\PY{n}{P}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{Tabla41}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{Comparacion} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{Comparacion}\PY{p}{,}
+                           \PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{t}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Poblacion \PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{times 10\PYZca{}6\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}2.2}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{cdot 1.19\PYZca{}t\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+                          \PY{n}{index}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{1940}\PY{o}{+}\PY{n}{j}\PY{o}{*}\PY{l+m+mi}{10} \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Comparacion}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{longtable}[]{@{}rrrr@{}}
+\toprule
+& t & Poblacion \(\times 10^6\) & \(2.2\cdot 1.19^t\) \\
+\midrule
+\endhead
+1940 & 0 & 2.3 & 2.2 \\
+1950 & 1 & 2.52 & 2.618 \\
+1960 & 2 & 3.02 & 3.11542 \\
+1970 & 3 & 3.7 & 3.70735 \\
+1980 & 4 & 4.45 & 4.41175 \\
+1990 & 5 & 5.3 & 5.24998 \\
+2000 & 6 & 6.06 & 6.24747 \\
+2010 & 7 & 6.8 & 7.43449 \\
+\bottomrule
+\end{longtable}
+
+    Se puede observar que los datos están cerca de lo que predice la
+ecuación en un margen de \(10^5\) sin sobrestimar o subestimar todos los
+puntos. Es decir la distancia a los datos es relativamente buena,
+también tomando en cuenta la complejidad de lo que se intenta modelar.
+
+    \hypertarget{b-quuxe9-porcentaje-de-aumento-en-la-poblaciuxf3n-en-cada-duxe9cada-supone-el-modelo-para-esta-ecuaciuxf3n}{%
+\subsection{b) ¿Qué porcentaje de aumento en la población en cada década
+supone el modelo para esta
+ecuación?}\label{b-quuxe9-porcentaje-de-aumento-en-la-poblaciuxf3n-en-cada-duxe9cada-supone-el-modelo-para-esta-ecuaciuxf3n}}
+
+Como el modelo es \(P_t = 2.2\cdot 1.19^t\), \(1.19= 1+r\) donde
+\(r=0.19\) es la tasa de crecimiento relativo a la población; es decir
+viene de la ecuación \(\Delta P_t = r P_t\); entonces \(19\%\) es el
+porcentaje de aumento de la población porque \(t\) está dado por
+decadas.
+
+    \hypertarget{c-quuxe9-poblaciuxf3n-predice-la-ecuaciuxf3n-para-el-auxf1o-2050}{%
+\subsection{c) ¿Qué población predice la ecuación para el año
+2050?}\label{c-quuxe9-poblaciuxf3n-predice-la-ecuaciuxf3n-para-el-auxf1o-2050}}
+
+El año 2050 está dado por \(1940+10t\), entonces
+\(t= (2050-1940)/10 = 11\) es la decada correspondiente a 2050. Así la
+población predecida para el año 2050 es
+\(P_{11} = 2.2 \cdot 1.19^{11}= 14.908682\) millones.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2050}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1940}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n+nb}{round}\PY{p}{(}\PY{l+m+mf}{2.2}\PY{o}{*}\PY{l+m+mf}{1.19}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{11}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+11
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+14.908682
+\end{Verbatim}
+\end{tcolorbox}
+        
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
